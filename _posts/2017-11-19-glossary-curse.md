@@ -132,11 +132,11 @@ Instead of transferring the outputs of the teacher network,~\citet{heo2019knowle
 
 $$
 \begin{equation}\label{eq:trans_act_loss}
-\mathcal{L}(I) =||\rho(\mathcal{T}(\mathcal{I}))\sigma \big(\mu \mathbf{1} - r(\cS(\cI))\big)+ \big(1 - \rho (\cT(\cI))\big) \circ \sigma ( \mu \mathbf{1} + r(\cS(\cI))\big)||_2^2
+\mathcal{L}(I) =||\rho(\mathcal{T}(\mathcal{I}))\sigma \big(\mu \mathbf{1} - r(\mathcal{S}(\mathcal{I}))\big)+ \big(1 - \rho (\cT(\mathcal{I}))\big) \circ \sigma ( \mu \mathbf{1} + r(\mathcal{S}(\mathcal{I}))\big)||_2^2
 \end{equation}
 $$
 
-where $$\mathcal{S}(\mathcal{I})$ and $\mathcal{T}(\mathcal{I})$$ are the neuron response tensors for student and teacher networks,  $\rho(\cT(I))$ is the the activation of teacher neurons corresponding to class labels, $r(\cS(\cI))$ is the , $r$ is a connector function (a fully connected layer in their experiments) that converts a neuron response vector of student to the same size as the teacher vector, $\circ$ is elementwise product of vectors and $\mu$ is the margin to stabilize training.
+where $$\mathcal{S}(\mathcal{I})$ and $\mathcal{T}(\mathcal{I})$$ are the neuron response tensors for student and teacher networks,  $\rho(\cT(I))$ is the the activation of teacher neurons corresponding to class labels, $r(\mathcal{S}(\mathcal{I}))$ is the , $r$ is a connector function (a fully connected layer in their experiments) that converts a neuron response vector of student to the same size as the teacher vector, $\circ$ is elementwise product of vectors and $\mu$ is the margin to stabilize training.
 
 #### Simulating Ensembled Teachers Training
 ~\citet{park2020improved} have extended the idea of student network learning from a noisy teacher to speech recognition and similarly found high compression rates. 
