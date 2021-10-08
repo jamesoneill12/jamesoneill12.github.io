@@ -73,7 +73,7 @@ the geometry of the data distribution that makes up the separation between class
 ~\autoref{fig:distil_perf} shows their plot, where on the left side a) and b) we see that as the gap between the student and teacher networks widen when the student network size is fixed, the performance of student network gradually degrades. Similarly, on the right hand side, a similar trend is observed when the student network size is increased with a fixed teacher network.
 
 
-
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source~\citet{mirzadeh2019improved}: KD Performance](/images/blog/kd/distil_perf.png)
 </div>
@@ -86,6 +86,7 @@ Theoretical analysis and extensive experiments on CIFAR-10,100 and ImageNet data
 Their \autoref{fig:loss_landscape} shows the loss surface of CNNs trained on CIFAR-100 for 3 different approaches: (1) no distillation, (2) standard knowledge distillation and (3) teaching assisted knowledge distillation. As shown, the teaching assisted knowledge distillation has a smoother surface around the local minima, corresponding to more robustness when the inputs are perturbed and better generalization. 
 
 
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source~\citet{mirzadeh2019improved}: Loss Landscape of Distillation](/images/blog/kd/loss_landscape_distil.png)
 </div>
@@ -98,7 +99,7 @@ Their \autoref{fig:loss_landscape} shows the loss surface of CNNs trained on CIF
 ~\citet{cho2019efficacy} analyse what are some of the main factors in successfully using a teacher network to distil a student network. Their main finding is that when the gap between the student and teacher networks capacity is too large, distilling a student network that maintains performance or close to the teacher is either unattainable or difficult. They also find that the student network can perform better if early stopping is used for the teacher network, as opposed to training the teacher network to convergence. 
 \autoref{fig:early_stop_teacher} shows that teachers (DenseNet and WideResNet) trained with early stopping are better suited as supervisors for the student network (DenseNet40-12 and WideResNet16-1).
 
-
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source~\citet{cho2019efficacy}: Early Stopping Teacher Networks to Improve Student Network Performance](/images/blog/kd/early_stop_teacher_no_caption.png)
 </div>
@@ -196,8 +197,8 @@ attention layers to be an important step in improving distillation performance.
 #### ALBERT
 ~\citet{lan2019albert} proposed factorized embeddings to reduce the size of the vocabulary embeddings and parameter sharing across layers to reduce the number of parameters without a performance drop and further improve performance by replacing next sentence prediction with an inter-sentence coherence loss. ALBERT is. 5.5\% the size of original BERT and has produced state of the art results on top NLP benchmarks such as GLUE~\citep{wang2018glue}, SQuAD~\citep{rajpurkar2016squad} and RACE~\citep{lai2017race}.  
 
-![original source \citep{ "BERT Distillation for Text Generation")
 
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source \citep{chen2019distilling}: BERT Distillation for Text Generation](/images/blog/kd/distil_bert_text_gen.png)
 </div>
@@ -322,9 +323,11 @@ Here, we describe how two commonly used generative models, variational inference
 
 ### Variational Inference Learned Student
 
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![Variational Student Framework (original source:~\citet{hegde2019variational})](/images/blog/kd/var_student.png)
 </div>
+
 
 
 
@@ -389,9 +392,12 @@ and loss changes. Since the gradient from $T$ tend to have low variance, this ca
 reaching a nash equilibrium. The difference between these models is illustrated in \autoref{fig:kdgan}.
 
 
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source~\citet{wang2018kdgan}: Comparison among KD, NaGAN, and KDGAN](/images/blog/kd/KDGAN_comparison_no_cap.png)
 </div>
+</div>
+
 
 #### Compressing Generative Adversarial Networks
 ~\citet{aguinaldo2019compressing} compress GANs achieving high compression ratios (58:1 on CIFAR-10 and 87:1 CelebA)
@@ -414,9 +420,10 @@ where $$\alpha$$ controls the influence of the MSE loss between the logit predic
  $$g_{\theta}(z)$$ of teacher and student respectively. The terms with expectations correspond to the standard
   adversarial loss.
 
-
+<div class="exampleBoxed">
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source~\citet{aguinaldo2019compressing}: Student Teacher GAN Training](/images/blog/kd/student_gan.png)
+</div>
 </div>
 
 
@@ -471,6 +478,7 @@ where $$h(T, S) = \frac{e^{g^T(T)' g^S(S)'/\tau}}{ e^{g^T(T) g^S(S)/\tau} + NM}$
 are accounted for in CRD (d) while in standard teacher-student networks (a) ignores the correlations and to 
 a less extent this is also found for attention transfer (b)~\citep{zagoruyko2016wide} and the student network
  distilled by KL divergence (c)~\citep{hinton2015distilling}.  
+
 
 <div style="flex:1; padding-right:2%" markdown="1">
 ![original source:~\citet{tian2019contrastive} Contrastive Distillation](/images/blog/kd/constrastive_distil_corr_plot_new.png)
@@ -690,100 +698,4 @@ $$
 where we derive the new weights $\mathbf{\theta}_1$ as a function of distilled data $\tilde{x}$ and learning rate $\tilde{\eta}$ using Equation 2 and then evaluate the new weights over all the training data $x$. The loss $L(\tilde{x}, \tilde{\eta}; \mathbf{\theta}_0)$ is differentiable w.r.t. $\tilde{x}$ and $\tilde{\eta}$, and can thus be optimized using standard gradient-based methods. In many classification tasks, the data $x$ may contain discrete parts, e.g., class labels in data-label pairs. For such cases, we fix the discrete parts rather than learn them.
 
 
-
-<div class="exampleBoxed">
-<div markdown="1">
-Let's look at a simple <span class='exampleText'> example </span>:
-
-Imagine we trained a certain classifier for distinguishing between :white_circle: and :large_blue_circle:. Now we want to predict the class of an unkown observation :black_circle: . Let's assume that: 
- * All features are given in percentages $\[0,1\]$
- * The algorithm is [non-parametric](/machine-learning-glossary/concepts/parametric) and has to look at the points in the surrounding hypercube, which spans $30\%$ of the input space (see below).
-
-Given only 1 feature (1D), we would simply need to look at $30\%$ of the dimension values. In 2D we would need to look at $\sqrt{0.3}=54.8\%$ of each dimensions. In 3D we would need $\sqrt[3]{0.3}=66.9\%$ of in each dimensions. Visually:
-
-<div style="display:flex;" markdown="1">
-<div style="flex:1; padding-right:2%" markdown="1">
-![sparsity in 1D](/images/blog/glossary-old/hDimension-sparsity-1.png)
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![sparsity in 2D](/images/blog/glossary-old/hDimension-sparsity-2.png)
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![sparsity in 3D](/images/blog/glossary-old/hDimension-sparsity-3.png)
-</div>
-</div>
-
-In order to keep a constant support (*i.e.* amount of knowledge of the space), we thus need more data when adding dimensions. In other words, if we add dimensions without adding data, there will be large unknown sub-spaces. This is called sparsity.
-
-I have kept the same number of observation in the plots, so that you can appreciate how "holes" appear in our training data as the dimension grows. 
-</div>
-</div>
-
- :x: <span class='disadvantage'> Disadvantage </span> : The data sparsity issue causes machine learning algorithms to fail finding patterns or to overfit.
-
-## Points are further from the center
-Basically, the volume of a high dimensional orange is mostly in its skin and not in the pulp! Which means expensive high dimensional juices :pensive: :tropical_drink:
-
-:bulb: <span class='intuition'> Intuition </span> : The volume of a sphere depends on $r^d$. The skin has a slightly greater $r$ than the pulp, in high dimensions this slight difference will become very important.
-
-If you're not convinced, stick with my simple proof. Let's consider a $d$ dimensional unit orange (*i.e.* $r=1$), with a skin of width $\epsilon$. Let's compute the ratio of the volume in the skin to the total volume of the orange. We can avoid any integrals by noting that the volume of a hypersphere is proportional to $r^d$ *i.e.* : $V_{d}(r) = k r^{d}$. 
-
-$$
-\begin{align*} 
-ratio_{skin/orange}(d) &= \frac{V_{skin}}{V_{orange}} \\
-&= \frac{V_{orange} - V_{pulp}}{V_{orange}} \\
-&= \frac{V_{d}(1)  - V_{d}(1-\epsilon) }{V_{d}(1)} \\
-&= \frac{k 1^d - k (1-\epsilon)^d}{k 1^d} \\
-&= 1 - (1-\epsilon)^d
-\end{align*} 
-$$
-
-Taking $\epsilon = 0.05$ as an example, here is the $ratio_{skin/orange}(d)$ we would get:
-
-<div style="display:flex;" markdown="1">
-<div style="flex:1; padding-right:2%" markdown="1">
-![2D orange](/images/blog/glossary-old/orange-2D.png)
-
-$$9.8 \%$${:.centerContainer}
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![3D orange](/images/blog/glossary-old/orange-3D.png)
-
-$$14.3 \%$${:.centerContainer}
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![5D orange](/images/blog/glossary-old/orange-5D.png)
-
-$$22.6 \%$${:.centerContainer}
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![10D orange](/images/blog/glossary-old/orange-10D.png)
-
-$$40.1 \%$${:.centerContainer}
-</div>
-</div>
-
-
-<font color="white">.</font>
-
-:mag: <span class='note'> Side Notes </span> : The same goes for hyper-cubes: most of the mass is concentrated at the furthest points from the center (*i.e.* the corners). That's why you will sometimes hear that hyper-cubes are "spiky". Think of the $\[-1,1\]^d$ hyper-cube: the distance from the center of the faces to the origin will trivially be $1 \ \forall d$, while the distance to each corners will be $\sqrt{d}$ (Pythagorean theorem). So the distance to corners increases with $d$ but not the center of the faces, which makes us think of spikes. This is why you will sometimes see such pictures:
-
-<div style="display:flex;" markdown="1">
-<div style="flex:1; padding-right:2%" markdown="1">
-![2D hypercube](/images/blog/glossary-old/hypercube-2D.png)
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![3D hypercube](/images/blog/glossary-old/hypercube-3D.png)
-</div>
-
-<div style="flex:1; padding-right:2%" markdown="1">
-![7D hypercube](/images/blog/glossary-old/hypercube-7D.png)
-</div>
-</div>
 
