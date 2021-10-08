@@ -360,17 +360,25 @@ to the data distribution $p_{data}$ (referred to as the nash equilibrium).
 
 First they propose Naive GAN (NaGAN) which consists of a classifier $C$ and a discriminator $D$ where $C$ generates pseudo labels given a sample $x$ from a categorical distribution  $p_c(\vec{y}|\vec{x})$ and $D$ distinguishes between the true targets and the generated ones. The objective for NaGAN is express as,
 
+$$
 \begin{equation}
 \min_{c} \max_{d} V(c, d) = \mathbb{E}_{\vec{y} \sim p_u} [\log p_d(\vec{x}, \vec{y})] + \mathbb{E}_{\vec{y} \sim p_c}[\log(1 - p^{\varrho}_d(\vec{x}, \vec{y}))]    
 \end{equation}
+$$
 
-where $V(c, d)$ is the value function. The scoring functions of $C$ and $D$ are $h(\vec{x}, y)$ and $g(x,y)$ respectively. Then $p_c(y|\vec{x})$ and $p^{\varrho}_d(\vec{x},y)$ are expressed as,
+where $$V(c, d)$$ is the value function. The scoring functions of $$C$$ and $$D$$ are 
+$$h(\vec{x}, y)$$ and $$g(x,y)$$ respectively. Then $$p_c(y|\vec{x})$$ and $$p^{\varrho}_d(\vec{x},y)$$
+ are expressed as,
 
+$$
 \begin{equation}
 p_c(y|\vec{x}) = \phi(h(\vec{x},y)) ,\quad p^{\varrho}_d(\vec{x},y) = \sigma(g(\vec{x},y))  
 \end{equation}
+$$
 
-where $\phi$ is the softmax function and $\sigma$ is the sigmoid function. However, NaGAN requires a large number of samples and epochs to converge to nash equilibrium using this objective, since the gradients from $D$ that update $C$ can often vanish or explode. 
+where $$\phi$$ is the softmax function and $\sigma$ is the sigmoid function. However, NaGAN requires a large number
+ of samples and epochs to converge to nash equilibrium using this objective, since the gradients 
+ from $$D$$ that update $$C$$ can often vanish or explode. 
 
 This brings us to their main contribution, Knowledge Distilled GAN (KDGAN).
 
@@ -428,9 +436,11 @@ They aim to preserve similarity between student and pretrained teacher activatio
   logit output $$\sigma(\vec{z}_s)$$ and target $$y$$ summed with the similarity preserving distillation loss
    component on the RHS of \autoref{eq:spdl},
 
+$$
 \begin{equation}\label{eq:spdl}
  \mathcal{L} = \mathcal{L}_{\text{ce}} (\vec{y}, \phi(\vec{Z}_S)) + \frac{\gamma}{b^2} \sum_{(l, l^{'}) \in \mathcal{I}} ||\mat{G}^{(l)}_T  - \mat{G}^{(l')}_S ||^2_F
 \end{equation}
+$$
 
 where $$||\cdot||_F$$ denotes the Frobenius norm, $$\mathcal{I}$$ is the total number of layer pairs considered
  and $\gamma$ controls the influence of similarity preserving term between both networks.  
