@@ -1,5 +1,5 @@
 ---
-title: 'Neural Compression concepts'
+title: 'Neural Compression Concepts'
 date: 2017-11-19
 #modified: 
 permalink: /machine-learning-glossary/concepts
