@@ -20,7 +20,7 @@ sidebar:
 
 {% include base_path %}
 
-# Model Distillation}\
+# Model Distillation
 Knowledge distillation involves learning a smaller network from a large network using supervision from the
 larger network and minimizing the entropy, distance or divergence between their probabilistic estimates. 
 
@@ -84,44 +84,22 @@ Theoretical analysis and extensive experiments on CIFAR-10,100 and ImageNet data
 
 Their \autoref{fig:loss_landscape} shows the loss surface of CNNs trained on CIFAR-100 for 3 different approaches: (1) no distillation, (2) standard knowledge distillation and (3) teaching assisted knowledge distillation. As shown, the teaching assisted knowledge distillation has a smoother surface around the local minima, corresponding to more robustness when the inputs are perturbed and better generalization. 
 
-\begin{wrapfigure}{R}{8cm}
-%\begin{figure}[ht]
-    \centering
-    \includegraphics[scale=0.33]{images/blog/kd/loss_landscape_distil.png}
-    \caption{original source:~\citet{mirzadeh2019improved}}
-    \label{fig:loss_landscape}
-\end{wrapfigure}
+![original source:~\citet{mirzadeh2019improved}](images/blog/kd/loss_landscape_distil.png "Loss Landscape of Distillation")
 
 
-\paragraph{On the Efficacy of Model Distillation}
+#### On the Efficacy of Model Distillation
 
 ~\citet{cho2019efficacy} analyse what are some of the main factors in successfully using a teacher network to distil a student network. Their main finding is that when the gap between the student and teacher networks capacity is too large, distilling a student network that maintains performance or close to the teacher is either unattainable or difficult. They also find that the student network can perform better if early stopping is used for the teacher network, as opposed to training the teacher network to convergence. 
-
 \autoref{fig:early_stop_teacher} shows that teachers (DenseNet and WideResNet) trained with early stopping are better suited as supervisors for the student network (DenseNet40-12 and WideResNet16-1).
 
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{images/blog/kd/early_stop_teacher_no_caption.png}
-    \caption{original source~\citet{cho2019efficacy}: Early Stopping Teacher Networks to Improve Student Network Performance}
-    \label{fig:early_stop_teacher}
-\end{figure}
+![original source~\citet{cho2019efficacy}](images/blog/kd/early_stop_teacher_no_caption.png "Early Stopping Teacher Networks to Improve Student Network Performance")
 
-\iffalse
-\paragraph{\textcolor{red}{A Statistical Perspective Why Distillation Works}}
-~\citet{menon2020distillation} show
-
-We establish the statistical benefit of using the Bayes class-probabilities in place of one-hotlabels, and quantify abias-variancetradeoff when using approximate class-probabilities (3).(ii)We proposedouble-distillation, a novel application of distillation for multiclass retrieval where in teacher probabilities guide arankingover labels (4).(iii)We experimentally validate the value of both approximate class-probabilities in terms of generalisation, and of double-distillation in multiclassretrieval
-\fi
-
-
-\paragraph{Avoid Training the Teacher Network with Label Smoothing}
+#### Avoid Training the Teacher Network with Label Smoothing
 ~\citet{muller2019does} show that because label smoothing forces the same class sample representations to be closer to each other in the embedding space, it provides less information to student network about the boundary between each class and in turn leads to poorer generlization performance. They quantify the variation in logit predictions due to the hard targets using mutual information between the input and output logit and show that label smoothing reduces the mutual information. Hence, they draw a connection between label smoothing and information bottleneck principle and show through experiments that label smoothing can implicitly calibrate the predictions of a DNN. 
 
-% We explain this effect in terms of erasure of information. With labelsmoothing, the model is encouraged to treat each incorrect class as equally probable. With hard targets,less structure is enforced in later representations, enabling more logit variation across predicted classand/or across examples. 
 
-\paragraph{Distilling with Noisy labels}
+#### Distilling with Noisy labels
 ~\citet{sau2016deep} propose to use noise to simulate learning from multiple teacher networks by simply adding Gaussian noise the logit outputs of the teacher network, resulting in better compression when compared to training with the original logits as targets for the teacher network. They choose a set of samples from each mini-batch with a probability $\alpha$ to perturbed by noise while the remaining samples are unchanged. They find that a relatively high $\alpha=0.8$ performed the best for image classification task, corresponding to 80\% of teacher logits having noise. 
-
 
 ~\citet{li2017learning} distil models with noisy labels and use a small dataset with clean labels, alongside a knowledge graph that contains the label relations, to estimate risk associated with training using each noisy label. 
 A model is trained on the clean dataset $D_c$ and the main model is trained over the whole dataset $D$ with noisy labels using the loss function,
@@ -150,37 +128,16 @@ $$
 
 where $$\mathcal{S}(\mathcal{I})$ and $\mathcal{T}(\mathcal{I})$$ are the neuron response tensors for student and teacher networks,  $\rho(\cT(I))$ is the the activation of teacher neurons corresponding to class labels, $r(\cS(\cI))$ is the , $r$ is a connector function (a fully connected layer in their experiments) that converts a neuron response vector of student to the same size as the teacher vector, $\circ$ is elementwise product of vectors and $\mu$ is the margin to stabilize training.
 
-
-
-% Let  the  number  of  neurons  in  a  teacher  net-work be M(T(I)∈RM), and the number of neurons in astudent networkN(S(I)∈RN). The connector functionr:RN→RMconverts a neuron response vector of studentto the size of teacher vector. Using the connector function,the alternative loss (4) is changed as
-
-
-%The activation boundary is a separating hyperplane that determines  whether  neurons  are  active  or  deactivated.  Inneural  networks,  the  activation  of  neurons  has  been  con-sidered  to  be  important  for  a  long  time.  Recently,  regard-ing the activation boundary, Montufar et al. (2014) and Pas-canu,  Mont ́ufar,  and  Bengio  (2014)  reported  that  a  neuralnetwork expresses a complex function with a combinationof activation boundaries. Pan and Srikumar (2016) providedthe fact that the decision boundary of a neural network iscomposed of a combination of activation boundaries. Thesestudies give an insight that the transfer of activation bound-ary information in the teacher to the student could greatlycontribute to an improvement of knowledge transfer perfor-mance  in  classification  problems,  because  a  classificationproblem highly depends on the formation of decision bound-aries among classes.
-
-
-\paragraph{Simulating Ensembled Teachers Training}
+#### Simulating Ensembled Teachers Training
 ~\citet{park2020improved} have extended the idea of student network learning from a noisy teacher to speech recognition and similarly found high compression rates. 
 ~\citet{han2018co} have pointed out that co-teaching (where two networks learn from each other where one has clean outputs and the other has noisy outputs) avoids a single DNN from learning to memorize the noisy labels and select samples from each mini-batch that the networks should learn from and avoid those samples which correspond to noisy labels. Since both networks have different ways of learning, they filter different types of error occurring from the noisy labels and this information is communicated mutually. This strategy could also be useful for using the teacher network to provide samples to a smaller student network that improve the learning of the student. 
 
-
-\iffalse
-\paragraph{DeepInversion}
-~\citet{yin2020dreaming} 
-We ``invert'' a trained network (teacher) to synthesize class-conditional input images starting from random noise, without using any additional information on thetraining dataset. Keeping the teacher fixed, our method opti-mizes the input while regularizing the distribution of interme-diate feature maps using information stored in the batch nor-malization layers of the teacher. Further, we improve the di-versity of synthesized images using Adaptive DeepInversion,which maximizes the Jensen-Shannon divergence between the teacher and student network logits
-\fi
-
-
-\paragraph{Layer Fusion}
+#### Layer Fusion
 Layer Fusion (LF)~\citep{neill2020compressing} is a technique to identify similar layers in very deep pretrained networks and fuse the top-k most similar layers during retraining for a target task. Various alignments measures are proposed that have desirable properties of for layer fusion and freezing, averaging and dynamic mixing of top-k layer pairs are all experimented with for fusing the layers. This can be considered as unique approach to knowledge distillation as it does aim to preserve the knowledge in the network while preserving network density, but without having to train a student network from scratch. 
 
 
 ## Distilling Recurrent (Autoregressive) Neural Networks
-
-
 Although the work by ~\citet{bucilua2006model} and ~\citet{hinton2015distilling} has often proven successful for reducing the size of neural models in other non-sequential tasks, many sequential tasks in NLP and CV have high-dimensional outputs (machine translation, pixel generation, image captioning etc.). This means using the teachers probabilistic outputs as targets can be expensive.
-
-% In standard knowledge distillation for sequence modelling, the cross-entropy is minimized between the student and network probability distribution along with the student and ground truth 1-hot vectors.
-
 ~\citet{kim2016sequence} use the teachers hard targets (also 1-hot vectors) given by the highest scoring beam search prediction from an encoder-decoder RNN, instead of the soft output probability distribution. The  teacher distribution $q(y_t|x)$ is approximated  by  its  mode:$q(y_s|x) \approx 1{t= \argmax_{y_t \in \mathcal{Y}} q(y_t|x)}$ with the following objective
 
 $$
@@ -198,36 +155,20 @@ In sequence-level interpolation, the targets from the teacher with the highest \
 %Our best student model runs 10 times faster than its
 %state-of-the-art teacher with little loss in performance. It is also significantly better than a baseline model trained without knowledge distillation: by 4.2/1.7 BLEU with greedy decoding/beam search. Applying weight pruning on top of knowledge distillation results in a student model that has 13x fewer parameters than the original teacher model, with a decrease of 0.4 BLEU.
 
-%\autoref{fig:kd} illustrates the difference between the sequential knowledge distillation approaches.
- 
-
-
-
-
-
-\iffalse
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.45]{images/blog/kd/kd_approaches_no_caption.png}
-    \caption{original source~\citet{kim2016sequence}}
-    \label{fig:kd_methods}
-\end{figure}
-\fi
-
-
-
-\subsection{Distilling Transformer-based (Non-Autoregressive) Networks}\label{sec:distil_trans}
+## Distilling Transformer-based (Non-Autoregressive) Networks
 Knowledge distillation has also been applied to very large transformer networks, predominantly on BERT~\citep{devlin2018bert} given its wide success in NLP. Thus, there has been a lot of recent work towards reducing the size of BERT and related models using knowledge distillation. 
 
-\paragraph{DistilBERT}~\citet{sanh2019distilbert} achieves distillation by training a smaller BERT on very large batches using gradient accumulation, uses dynamic masking, initializes the student weights with teacher weights and removes the next sentence prediction objective. They train the smaller BERT model on the original data BERT was trained on and fine that DistilBERT is within 3\% of the original BERT accuracy while being 60\% faster when evaluated on the GLUE~\citep{wang2018glue} benchmark dataset. 
+#### DistilBERT
+~\citet{sanh2019distilbert} achieves distillation by training a smaller BERT on very large batches using gradient accumulation, uses dynamic masking, initializes the student weights with teacher weights and removes the next sentence prediction objective. They train the smaller BERT model on the original data BERT was trained on and fine that DistilBERT is within 3\% of the original BERT accuracy while being 60\% faster when evaluated on the GLUE~\citep{wang2018glue} benchmark dataset. 
 
 
-\paragraph{BERT Patient Model Distillation}
+#### BERT Patient Model Distillation
 Instead of minimizing the soft probabilities between the student and teacher network outputs,~\citet{sun2019patient} propose to also learn from the intermediate layers of the BERT teacher network by minimizing the mean squared error between adjacent and normalized hidden states. This loss is combined with the original objective proposed by~\citet{hinton2015distilling} which showed further improves in distilling BERT on the GLUE benchmark datasets~\citep{wang2018glue}.
 
-\paragraph{TinyBERT}
+#### TinyBERT
 TinyBERT~\citep{jiao2019tinybert} combines multiple Mean Squared Error (MSE) losses between embeddings, hidden layers, attention layers and prediction outputs between $S$ and $T$. The TinyBERT distillation objective is shown below, where it combines multiple reconstruction errors between $S$ and $T$ embeddings (when m=0), between the hidden and attention layers of $S$ and $T$ when $ M \geq m > 0$ where $M$ is index of the last hidden layer before prediction layer and lastly the cross entropy between the predictions where $t$ is the temperature of the softmax. 
 
+$$
 \[
 L_{layer}\big(S_m, T_g(m)  \big) =
 \begin{cases}
@@ -236,39 +177,22 @@ L_{layer}\big(S_m, T_g(m)  \big) =
      \text{softmax}(\vec{z}^T) \cdot \text{log-softmax}(\vec{z}^S/t) & m = M + 1 \\
 \end{cases}
 \]
+$$
 
-Through many ablations in experimentations, they find distilling the knowledge from multi-head attention layers to be an important step in improving distillation performance. 
+Through many ablations in experimentations, they find distilling the knowledge from multi-head 
+attention layers to be an important step in improving distillation performance. 
 
 
-\paragraph{ALBERT}~\citet{lan2019albert} proposed factorized embeddings to reduce the size of the vocabulary embeddings and parameter sharing across layers to reduce the number of parameters without a performance drop and further improve performance by replacing next sentence prediction with an inter-sentence coherence loss. ALBERT is. 5.5\% the size of original BERT and has produced state of the art results on top NLP benchmarks such as GLUE~\citep{wang2018glue}, SQuAD~\citep{rajpurkar2016squad} and RACE~\citep{lai2017race}.  
+#### ALBERT
+~\citet{lan2019albert} proposed factorized embeddings to reduce the size of the vocabulary embeddings and parameter sharing across layers to reduce the number of parameters without a performance drop and further improve performance by replacing next sentence prediction with an inter-sentence coherence loss. ALBERT is. 5.5\% the size of original BERT and has produced state of the art results on top NLP benchmarks such as GLUE~\citep{wang2018glue}, SQuAD~\citep{rajpurkar2016squad} and RACE~\citep{lai2017race}.  
 
+![original source \citep{chen2019distilling}](images/blog/kd/distil_bert_text_gen.png "BERT Distillation for Text Generation")
 
-\begin{wrapfigure}{r}{8cm}
-    \centering
-    \includegraphics[scale=0.3]{images/blog/kd/distil_bert_text_gen.png}
-    \caption{original source \citep{chen2019distilling}: BERT Distillation for Text Generation}
-    \label{fig:bert_distil_text_gen}
-\end{wrapfigure}
-
-\paragraph{BERT Distillation for Text Generation}
+#### BERT Distillation for Text Generation
 ~\citet{chen2019distilling} use a conditional masked language model that enables BERT to be used on generation tasks. The outputs of a pretrained BERT teacher network are used to provide sequence-level supervision to improve Seq2Seq model and allow them to plan ahead.~\autoref{fig:bert_distil_text_gen} illustrates the process, showing where the predicted probability distribution for the remaining tokens is minimized with respect to the masked output sequence from the BERT teacher.  
 
 
-
-\iffalse
-\paragraph{FastBERT}
-
-~\citet{liu2020fastbert} use self-distillation whereby the 
-
-
-The inference process of FastBERT, where the number of executed layers with each sample varies based on its complexity. This illustrates a sample-wise adaptive mechanism. Taking a batch of inputs (batchsize= 4) as an example, the Transformer 0 and Student-classifier 0 inferred their labels as probability distributions and calculatethe individual uncertainty. Cases with low uncertainty are immediately removed from the batch, while those withhigher uncertainty are sent to the next layer for further inference.
-
-
-% Our model achieves promising results in twelve English and Chinese datasets. It is able to speed up by a wide range from 1 to 12 times than BERT if given different speedup thresholds to make a speed-performance tradeoff.
-
-\fi
-
-\paragraph{Applications to Machine Translation}
+#### Applications to Machine Translation
 ~\citet{zhou2019understanding} seek to better understand why knowledge distillation leads to better non-autoregressive distilled models for machine translation. They find that the student network finds it easier to model variations in the output data since the teacher network reduces the complexity of the dataset.  
 
 
