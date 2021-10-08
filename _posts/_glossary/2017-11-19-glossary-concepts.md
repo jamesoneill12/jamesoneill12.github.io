@@ -1,10 +1,10 @@
 ---
-title: 'General ML concepts'
+title: 'Neural Compression concepts'
 date: 2017-11-19
 #modified: 
 permalink: /machine-learning-glossary/concepts
 toc: true
-excerpt: "ML concepts: general."
+excerpt: "ML concepts: neural compression."
 header: 
   teaser: "blog/glossary/glossary.png"
 tags:

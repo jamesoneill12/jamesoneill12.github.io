@@ -33,12 +33,12 @@ sidebar-glossary:
     # url: /machine-learning-glossary/concepts/
     children:
       - title: "Knowledge Distillation"
-        url: /machine-learning-glossary/concepts/curse
+        url: /machine-learning-glossary/concepts/kd
       - title: "Pruning"
         url: /machine-learning-glossary/concepts/pruning
       - title: "Quantization"
         url:  /machine-learning-glossary/concepts/quantization
-      - title: "No free lunch"
+      - title: "Quantization"
         url:  /machine-learning-glossary/concepts/weightshare
       - title: "Parametric vs non parametric"
         url:  /machine-learning-glossary/concepts/parametric
