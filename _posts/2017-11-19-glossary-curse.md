@@ -72,19 +72,25 @@ the geometry of the data distribution that makes up the separation between class
 
 ~\autoref{fig:distil_perf} shows their plot, where on the left side a) and b) we see that as the gap between the student and teacher networks widen when the student network size is fixed, the performance of student network gradually degrades. Similarly, on the right hand side, a similar trend is observed when the student network size is increased with a fixed teacher network.
 
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{images/blog/kd/distil_perf.png}
-    \caption{original source~\citet{mirzadeh2019improved}}
-    \label{fig:distil_perf}
-\end{figure}
+
+
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{mirzadeh2019improved}: KD Performance](/images/blog/kd/distil_perf.png)
+</div>
+</div>
+
 
 
 Theoretical analysis and extensive experiments on CIFAR-10,100 and ImageNet datasets and on CNN and ResNet architectures substantiate the effectiveness of our proposed approach.
 
 Their \autoref{fig:loss_landscape} shows the loss surface of CNNs trained on CIFAR-100 for 3 different approaches: (1) no distillation, (2) standard knowledge distillation and (3) teaching assisted knowledge distillation. As shown, the teaching assisted knowledge distillation has a smoother surface around the local minima, corresponding to more robustness when the inputs are perturbed and better generalization. 
 
-![original source:~\citet{mirzadeh2019improved}](images/blog/kd/loss_landscape_distil.png "Loss Landscape of Distillation")
+
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{mirzadeh2019improved}: Loss Landscape of Distillation](/images/blog/kd/loss_landscape_distil.png)
+</div>
+</div>
+
 
 
 #### On the Efficacy of Model Distillation
@@ -92,7 +98,11 @@ Their \autoref{fig:loss_landscape} shows the loss surface of CNNs trained on CIF
 ~\citet{cho2019efficacy} analyse what are some of the main factors in successfully using a teacher network to distil a student network. Their main finding is that when the gap between the student and teacher networks capacity is too large, distilling a student network that maintains performance or close to the teacher is either unattainable or difficult. They also find that the student network can perform better if early stopping is used for the teacher network, as opposed to training the teacher network to convergence. 
 \autoref{fig:early_stop_teacher} shows that teachers (DenseNet and WideResNet) trained with early stopping are better suited as supervisors for the student network (DenseNet40-12 and WideResNet16-1).
 
-![original source~\citet{cho2019efficacy}](images/blog/kd/early_stop_teacher_no_caption.png "Early Stopping Teacher Networks to Improve Student Network Performance")
+
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{cho2019efficacy}: Early Stopping Teacher Networks to Improve Student Network Performance](/images/blog/kd/early_stop_teacher_no_caption.png)
+</div>
+</div>
 
 #### Avoid Training the Teacher Network with Label Smoothing
 ~\citet{muller2019does} show that because label smoothing forces the same class sample representations to be closer to each other in the embedding space, it provides less information to student network about the boundary between each class and in turn leads to poorer generlization performance. They quantify the variation in logit predictions due to the hard targets using mutual information between the input and output logit and show that label smoothing reduces the mutual information. Hence, they draw a connection between label smoothing and information bottleneck principle and show through experiments that label smoothing can implicitly calibrate the predictions of a DNN. 
@@ -186,7 +196,13 @@ attention layers to be an important step in improving distillation performance.
 #### ALBERT
 ~\citet{lan2019albert} proposed factorized embeddings to reduce the size of the vocabulary embeddings and parameter sharing across layers to reduce the number of parameters without a performance drop and further improve performance by replacing next sentence prediction with an inter-sentence coherence loss. ALBERT is. 5.5\% the size of original BERT and has produced state of the art results on top NLP benchmarks such as GLUE~\citep{wang2018glue}, SQuAD~\citep{rajpurkar2016squad} and RACE~\citep{lai2017race}.  
 
-![original source \citep{chen2019distilling}](images/blog/kd/distil_bert_text_gen.png "BERT Distillation for Text Generation")
+![original source \citep{ "BERT Distillation for Text Generation")
+
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source \citep{chen2019distilling}: BERT Distillation for Text Generation](/images/blog/kd/distil_bert_text_gen.png)
+</div>
+</div>
+
 
 #### BERT Distillation for Text Generation
 ~\citet{chen2019distilling} use a conditional masked language model that enables BERT to be used on generation tasks. The outputs of a pretrained BERT teacher network are used to provide sequence-level supervision to improve Seq2Seq model and allow them to plan ahead.~\autoref{fig:bert_distil_text_gen} illustrates the process, showing where the predicted probability distribution for the remaining tokens is minimized with respect to the masked output sequence from the BERT teacher.  
@@ -304,21 +320,21 @@ In attention transfer [41], the supervisory signal for knowledge distillation is
 Here, we describe how two commonly used generative models, variational inference (VI) and generative adversarial networks (GANs), have been applied to learning a student networks. 
 
 
-\subsubsection{Variational Inference Learned Student}
+### Variational Inference Learned Student
 
-\begin{wrapfigure}{R}{6.5cm}
-\vspace{-3em}
-    \centering
-    \includegraphics[scale=0.25]{images/blog/kd/var_student.png}
-    \caption{Variational Student Framework (original source:~\citet{hegde2019variational})}\label{fig:var_student}
-\end{wrapfigure}
+<div style="flex:1; padding-right:2%" markdown="1">
+![Variational Student Framework (original source:~\citet{hegde2019variational})](/images/blog/kd/var_student.png)
+</div>
+
+
+
 
 ~\citet{hegde2019variational} propose a variational student whereby VI is used for knowledge distillation. The parameters induced by using VI-based least squares objective are sparse, improving the generalizability of the student network. Sparse Variational Dropout (SVD)~\citet{kingma2015variational,molchanov2017variational} techniques can also be used in this framework to promote sparsity in the network. The VI objective is shown in \autoref{eq:var_student}, where $\vec{z}^s$ and $\vec{z}^t$ are the output logits from student and teacher networks.
 
 
 \begin{multline}\label{eq:var_student}
-    \cL(\vec{x}, \vec{y},\mat{W}_s,\mat{W}_t, \alpha) = - \frac{1}{N}\sum_{n=1}^N \vec{y}_n \log(\vec{z}^s_n) +  \lambda_T \Bigg[ 2T^2 D_{\text{KL}}\Bigg(  \sigma^{'} \Big(\frac{\vec{z}^s}{T}\Big) \Big|\Big|  \sigma^{'}  \Big(\frac{\vec{z}^t}{T}\Big)\Bigg)\Bigg] \\
-    + \lambda_V \cL_{\text{KL}}(\mat{W}_s, \alpha) + \lambda_g \sum_{m=1}^M\Big|\max_{n,k,h,l} W_{T:S}(m, n, k, h, l)\Big|
+    \mathcal{L}(\vec{x}, \vec{y},\mat{W}_s,\mat{W}_t, \alpha) = - \frac{1}{N}\sum_{n=1}^N \vec{y}_n \log(\vec{z}^s_n) +  \lambda_T \Bigg[ 2T^2 D_{\text{KL}}\Bigg(  \sigma^{'} \Big(\frac{\vec{z}^s}{T}\Big) \Big|\Big|  \sigma^{'}  \Big(\frac{\vec{z}^t}{T}\Big)\Bigg)\Bigg] \\
+    + \lambda_V \mathcal{L}_{\text{KL}}(\mat{W}_s, \alpha) + \lambda_g \sum_{m=1}^M\Big|\max_{n,k,h,l} W_{T:S}(m, n, k, h, l)\Big|
 \end{multline}
 
 
@@ -358,83 +374,99 @@ where $\phi$ is the softmax function and $\sigma$ is the sigmoid function. Howev
 
 This brings us to their main contribution, Knowledge Distilled GAN (KDGAN).
 
-KDGAN somewhat remedy the aforementioned converegence problem by introducing a pretrained teacher network $T$ along with $C$ and $D$. The objective then consists of a distillation $\ell_2$ loss component between $T$ and $C$ and adversarial loss between $T$ and $D$. Therfore, both $C$ and $T$ aim to fool $D$ by generating fake labels that seem real, while $C$ tries to distil the knowledge from $T$ such that both $C$ and $T$ agree on a good fake label. 
-
-The student network convergence is tracked by observing the generator outputs and loss changes. Since the gradient from $T$ tend to have low variance, this can help $C$ converge faster, reaching a nash equilibrium. The difference between these models is illustrated in \autoref{fig:kdgan}.
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.4]{images/blog/kd/KDGAN_comparison_no_cap.png}
-    \caption{original source~\citet{wang2018kdgan}: Comparison among KD, NaGAN, and KDGAN}
-    \label{fig:kdgan}
-\end{figure}
-
-\paragraph{Compressing Generative Adversarial Networks}
+KDGAN somewhat remedy the aforementioned converegence problem by introducing a pretrained 
+teacher network $$T$$ along with $C$ and $D$. The objective then consists of a distillation $\ell_2$ loss component between $T$ and $C$ and adversarial loss between $T$ and $D$. Therfore, both $C$ and $T$ aim to fool $D$ by generating fake labels that seem real, while $C$ tries to distil the knowledge from $$T$$ such that both $$C$$ and $$T$$
+agree on a good fake label. The student network convergence is tracked by observing the generator outputs 
+and loss changes. Since the gradient from $T$ tend to have low variance, this can help $C$ converge faster, 
+reaching a nash equilibrium. The difference between these models is illustrated in \autoref{fig:kdgan}.
 
 
-~\citet{aguinaldo2019compressing} compress GANs achieving high compression ratios (58:1 on CIFAR-10 and 87:1 CelebA) while maintaining high Inception Score (IS) and low Frechet Inception Distance (FID). They're main finding is that a compressed GAN can outperform the original overparameterized teacher GAN, providing further evidence for the benefit of compression in very larrge networks.~\autoref{fig:stud_gan} illustrates the student-teacher training using a joint loss between the student GAN discriminator and teacher generator DCGAN. 
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{wang2018kdgan}: Comparison among KD, NaGAN, and KDGAN](/images/blog/kd/KDGAN_comparison_no_cap.png)
+</div>
 
-Student-teacher training framework with joint loss for student training. The teacher generator was trained using deconvolutional GAN~\citep[DCGAN;][]{radford2015unsupervised} framework.
+#### Compressing Generative Adversarial Networks
+~\citet{aguinaldo2019compressing} compress GANs achieving high compression ratios (58:1 on CIFAR-10 and 87:1 CelebA)
+ while maintaining high Inception Score (IS) and low Frechet Inception Distance (FID). They're main finding is
+ that a compressed GAN can outperform the original overparameterized teacher GAN, providing further evidence for 
+ the benefit of compression in very larrge networks.~\autoref{fig:stud_gan} illustrates the student-teacher training
+  using a joint loss between the student GAN discriminator and teacher generator DCGAN. Student-teacher training
+   framework with joint loss for student training. The teacher generator was trained using deconvolutional 
+   GAN~\citep[DCGAN;][]{radford2015unsupervised} framework.
 
 They use a joint training loss to optimize that can be expressed as,
 
+$$
 \begin{equation}
 \min_{\theta \in \Theta} \max_{\vec{w} \in W} \mathbb{E}_{\vec{x} \sim p_{\text{data}}}[\log(f_{\vec{w}}(\vec{x})] + \mathbb{E}_{z \sim p_z} \Big[ \alpha \log (1 - f_{\vec{w}}(g_{\theta}(z))) + (1 - \alpha) g_{\text{teacher}}||(z) - g_{\theta}(z)||^2 \Big]
 \end{equation}
+$$
 
-where $\alpha$ controls the influence of the MSE loss between the logit predictions $g_{\text{teacher}}(z)$ and $g_{\theta}(z)$ of teacher and student respectively. The terms with expectations correspond to the standard adversarial loss.
-
-\begin{wrapfigure}{R}{7cm}
-\vspace{-1em}
-    \centering
-    \includegraphics[scale=0.3]{images/blog/kd/student_gan.png}
-    \caption{original source~\citet{aguinaldo2019compressing}: Student Teacher GAN Training}
-    \label{fig:stud_gan}
-\end{wrapfigure}
+where $$\alpha$$ controls the influence of the MSE loss between the logit predictions $$g_{\text{teacher}}(z)$$ and
+ $$g_{\theta}(z)$$ of teacher and student respectively. The terms with expectations correspond to the standard
+  adversarial loss.
 
 
-\subsection{Metric Learning Model Distillation}
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{aguinaldo2019compressing}: Student Teacher GAN Training](/images/blog/kd/student_gan.png)
+</div>
+
+
+## Metric Learning Model Distillation
 Apart from pointwise classification tasks, knowledge distillation has also been performed for pairwise tasks. 
 
-\subsubsection{Similarity-preserving Model Distillation}
+### Similarity-preserving Model Distillation
+Semantically similar inputs tend to have similar activation patterns. Based on this premise,
+~\citet{tung2019similarity} have propose knowledge distillation such that input pair similarity scores from the
+ student network are similar to those from the teacher network. This can be a pairwise learning extension of the
+  standard knowledge distillation approaches. 
 
-Semantically similar inputs tend to have similar activation patterns. Based on this premise,~\citet{tung2019similarity} have propose knowledge distillation such that input pair similarity scores from the student network are similar to those from the teacher network. This can be a pairwise learning extension of the standard knowledge distillation approaches. 
-
-They aim to preserve similarity between student and pretrained teacher activations for a given batch of similar and dissimilar input pairs. For a batch $b$, a similarity matrix $G(l^{'})_S \in \mathbb{R}^{b \times b}$ is produced between their student activations $A^{(l^{'})}_S$ at the $l^{'}$ layer and teacher activations $A^{(l)}_T$ at the l-th layer. The objective is then defined as the cross entropy between the student logit output $\sigma(\vec{z}_s)$
-and target $y$ summed with the similarity preserving distillation loss component on the RHS of \autoref{eq:spdl},
+They aim to preserve similarity between student and pretrained teacher activations for a given batch of similar and
+ dissimilar input pairs. For a batch $b$, a similarity matrix $$G(l^{'})_S \in \mathbb{R}^{b \times b}$$ is produced
+  between their student activations $A^{(l^{'})}_S$ at the $l^{'}$ layer and teacher activations 
+  $$A^{(l)}_T$$ at the $$l$$-th layer. The objective is then defined as the cross entropy between the student 
+  logit output $$\sigma(\vec{z}_s)$$ and target $$y$$ summed with the similarity preserving distillation loss
+   component on the RHS of \autoref{eq:spdl},
 
 \begin{equation}\label{eq:spdl}
  \mathcal{L} = \mathcal{L}_{\text{ce}} (\vec{y}, \phi(\vec{Z}_S)) + \frac{\gamma}{b^2} \sum_{(l, l^{'}) \in \mathcal{I}} ||\mat{G}^{(l)}_T  - \mat{G}^{(l')}_S ||^2_F
 \end{equation}
 
-where $||\cdot||_F$ denotes the Frobenius norm, $\mathcal{I}$ is the total number of layer pairs considered and $\gamma$ controls the influence of similarity preserving term between both networks.  
+where $$||\cdot||_F$$ denotes the Frobenius norm, $$\mathcal{I}$$ is the total number of layer pairs considered
+ and $\gamma$ controls the influence of similarity preserving term between both networks.  
 
-\iffalse
-\begin{wrapfigure}{R}{8cm}
-    \centering
-    \includegraphics[scale=0.45]{images/blog/kd/sim_preserving_mod_distil_no_desc.png}
-    \caption{original source:~\citet{tung2019similarity}}
-    \label{fig:spmd}
-\end{wrapfigure}
-\fi
-
-In the transfer learning setting, their experiments show that similarity preserving can be a robust way to deal with domain shift. Moreover, this method complements the SoTA attention transfer~\citep{zagoruyko2016paying} approach. 
+In the transfer learning setting, their experiments show that similarity preserving can be a robust way to deal 
+with domain shift. Moreover, this method complements the SoTA attention transfer~\citep{zagoruyko2016paying} approach. 
 
 
-\subsubsection{Contrastive Representation Distillation}
-Instead of minimizing the KL divergence between the scalar outputs of teacher network $T$ and student network $S$,~\citet{tian2019contrastive} propose to preserve structural information of the embedding space. Similar to~\citet{hinton2012improving}, they force the representations between the student and teacher network to be similar but instead use a constrastive loss that moves positive paired representations closer together while positive-negative pairs away. This contrastive objective is given by,
+### Contrastive Representation Distillation
+Instead of minimizing the KL divergence between the scalar outputs of teacher network $$T$$ and student network
+ $S$,~\citet{tian2019contrastive} propose to preserve structural information of the embedding space. 
+ Similar to~\citet{hinton2012improving}, they force the representations between the student and teacher network
+  to be similar but instead use a constrastive loss that moves positive paired representations closer together 
+  while positive-negative pairs away. This contrastive objective is given by,
 
+$$
 \begin{multline}
-    f^{S*} = \argmax_{f^S} \max_h \cL_{\text{critic}}(h) = \\
+    f^{S*} = \argmax_{f^S} \max_h \mathcal{L}_{\text{critic}}(h) = \\
     \argmax_{f^S} \max_h   \mathbb{E}_q(T ,S|C=1)[\log h(T, S)] +  N \mathbb{E}_{q}(T ,S|C=0)[\log(1 - h(T, S))]
 \end{multline}
+$$
 
-where $h(T, S) = \frac{e^{g^T(T)' g^S(S)'/\tau}}{ e^{g^T(T) g^S(S)/\tau} + NM}$, $M$ is number of data samples, $\tau$ is the temperature. If the dimensionality of the outputs from $g^T$ and $g^S$ are not equal, a linear transformation is made to fixed size followed by an $\ell_2$ normalization.
+where $$h(T, S) = \frac{e^{g^T(T)' g^S(S)'/\tau}}{ e^{g^T(T) g^S(S)/\tau} + NM}$$, $$M$$ is number of data samples,
+ $$\tau$$ is the temperature. If the dimensionality of the outputs from $$g^T$$ and $$g^S$$ are not equal, 
+ a linear transformation is made to fixed size followed by an $$\ell_2$$ normalization.
 
-~\autoref{fig:constrastive_distil_corr_plot} demonstrates how the correlations between student and teacher network are accounted for in CRD (d) while in standard teacher-student networks (a) ignores the correlations and to a less extent this is also found for attention transfer (b)~\citep{zagoruyko2016wide} and the student network distilled by KL divergence (c)~\citep{hinton2015distilling}.  
+~\autoref{fig:constrastive_distil_corr_plot} demonstrates how the correlations between student and teacher network 
+are accounted for in CRD (d) while in standard teacher-student networks (a) ignores the correlations and to 
+a less extent this is also found for attention transfer (b)~\citep{zagoruyko2016wide} and the student network
+ distilled by KL divergence (c)~\citep{hinton2015distilling}.  
 
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source:~\citet{tian2019contrastive} Contrastive Distillation](/images/blog/kd/constrastive_distil_corr_plot_new.png)
+</div>
+</div>
 
-![original source:~\citet{tian2019contrastive}](images/blog/kd/constrastive_distil_corr_plot_new.png "Contrastive Distillation")
 
 #### Distilling SimCLR
 ~\citet{chen2020big} shows that an unsupervised learned constrastive-based CNN requires 10 times less 
@@ -449,10 +481,14 @@ and angular-based (cosine proximity) loss functions that account for different r
  claim that metric learning allows the student relational network to outperform the teacher network on 
  achieving SoTA on relational datasets.
 
-![original source~\citet{park2019relational}](images/blog/kd/rkd.png "Individual knowledge distillation (IKD) vs. relational knowledge distillation (RKD)")
+<div style="flex:1; padding-right:2%" markdown="1">
+![original source~\citet{park2019relational}Contrastive Distillation: Individual knowledge distillation (IKD) vs. relational knowledge distillation (RKD)](/images/blog/kd/rkd.png)
+</div>
+</div>
 
-The $\psi(\cdot)$ similarity function from the relation teacher network outputs a score that is
- transferred to as a pseudo target for the teacher network to learn from as,
+
+The $$\psi(\cdot)$$ similarity function from the relation teacher network outputs a score that is
+transferred to as a pseudo target for the teacher network to learn from as,
 
 $$
 \[
@@ -480,14 +516,14 @@ tasks.
 
 $$
 \begin{equation}\label{eq:ang_loss_2}
-\cL_{rmd-a} = \sum_{(x_i,x_j ,x_k) \in \cX^3} l_{\delta} \psi_A(t_i, t_j , t_k), \psi_A(s_i, s_j , s_k)
+\mathcal{L}_{rmd-a} = \sum_{(x_i,x_j ,x_k) \in \cX^3} l_{\delta} \psi_A(t_i, t_j , t_k), \psi_A(s_i, s_j , s_k)
 \end{equation}
 $$
 
 This is then used as a regularization terms to the task specific loss as,
 $$
 \begin{equation}\label{eq:total_loss}
-\cL_{\text{task}} + \lambda_{\text{MD}} \cL_{MD} 
+\mathcal{L}_{\text{task}} + \lambda_{\text{MD}} \mathcal{L}_{MD} 
 \end{equation}
 $$
 
@@ -495,7 +531,7 @@ When used in metric learning the triplet loss shown in \autoref{eq:triplet_loss}
 
 $$
 \begin{equation}\label{eq:triplet_loss}
-\cL_{\text{triplet}} = \Big[ || f(\vec{x}_a) - f(\vec{x}_p) ||^2_2 - || f(\vec{x}_a) - f(\vec{x}_n)||^2_2 + m \Big]_{+}    
+\mathcal{L}_{\text{triplet}} = \Big[ || f(\vec{x}_a) - f(\vec{x}_p) ||^2_2 - || f(\vec{x}_a) - f(\vec{x}_n)||^2_2 + m \Big]_{+}    
 \end{equation}
 $$
 
@@ -576,7 +612,10 @@ noise is passed as input to the teacher and update gradients to the noise to min
 
 The left figure in \autoref{fig:data_free_md} shows the activation statistics for the top layer and a sample drawn that is used to optimize the input to teacher network to reconstruct the activations. The reconstructed input is then fed to the student network. On the right, the same procedure follows but for reconstructing activations for all layers of the teacher network. 
 
-![data free md](images/blog/kd/data_free_kd.png "Data-Free Knowledge Distillation")
+<div style="flex:1; padding-right:2%" markdown="1">
+![Data-Free Knowledge Distillation](/images/blog/kd/data_free_kd.png)
+</div>
+</div>
 
 They manage to compress the teacher network to half the size in the student network using the reconstructed inputs constructed from using the metadata. The amount of compression achieved is contingent on the quality of the metadata, in their case they only used activation statistics. We posit that the notion of creating synthetic data from summary statistics of the original data to train the student network is worth further investigation. 
 
@@ -618,7 +657,9 @@ $$
 \end{equation}
 $$
 
-where $$\eta$$ is the learning rate. Such a training process often takes tens of thousands or even millions of update steps to converge. Instead, we aim to learn a tiny set of synthetic distilled training data $\tilde{x} = \{\tilde{\vec{x}}_i\}_{i=1}^{M}$ with $M << N$ and a corresponding learning rate $\tilde{\eta}$ so that a single gradient descent step such as 
+where $$\eta$$ is the learning rate. Such a training process often takes tens of thousands or even millions of update steps to converge. Instead, we aim to learn a 
+tiny set of synthetic distilled training data $$\tilde{x} = \{\tilde{\vec{x}}_i\}_{i=1}^{M}$$ with $M << N$ and a 
+corresponding learning rate $\tilde{\eta}$ so that a single gradient descent step such as 
 
 $$
 \begin{equation}
@@ -736,27 +777,3 @@ $$40.1 \%$${:.centerContainer}
 </div>
 </div>
 
-## Euclidean distance becomes meaningless
-There's nothing that makes Euclidean distance intrinsically meaningless for high dimensions. But due to our finite number of data, 2 points in high dimensions seem to be more "similar" due to sparsity and basic probabilities.
-
-:bulb: <span class='intuition'> Intuition </span>:
-* Let's consider the distance between 2 points $\mathbf{q}$ and $p$ that are close in $\mathbb{R}^d$. By adding independent dimensions, the probability that these 2 points differ greatly in at least one dimension grows (due to randomness). This is what causes the sparsity issue. Similarly, the probability that 2 points far away in $\mathbb{R}$ will have at least one similar dimension in $\mathbb{R}^d, \ d'>d$, also grows. So basically, adding dimensions makes points seem more random, and the distances thus become less useful.
-* Euclidean distance accentuates the point above. Indeed, by adding dimensions, the probability that $\mathbf{x}^{(1)}$ and $\mathbf{x}^{(2)}$ points have at least one completely different feature grows. *i.e.* $\max_j \, (x_j^{(1)}, x_j^{(2)})$ increases. The Euclidean distance between 2 points is $D(\mathbf{x}^{(1)},\mathbf{x}^{(2)})=\sqrt{\sum_{j=1}^D (\mathbf{x}_j^{(1)}-\mathbf{x}_j^{(2)})^2}$. Because of the squared term, the distance depends strongly on $max_j \, (x_j^{(1)}-x_j^{(2)})$. This results in less relative difference between distances of "similar" and "dissimilar points" in high dimensions. Manhattan ($L_1$) or fractional distance metrics ($L_c$ with $c<1$) are thus preferred in high dimensions. 
-
-
-In such discussions, people often cite a [theorem](https://www.researchgate.net/profile/Jonathan_Goldstein4/publication/2845566_When_Is_Nearest_Neighbor_Meaningful/links/09e4150b3eb298bf21000000/When-Is-Nearest-Neighbor-Meaningful.pdf) stating that for *i.i.d* points in high dimension, a query point $\mathbf{x}^{(q)}$ converges to the same distance to all other points $P=\\{\mathbf{x}^{(n)}\\}_{n=1}^N$ :
-
-$$\lim_{d \to \infty} \mathop{\mathbb{E}} \left[\frac{\max_{n} \, (\mathbf{x}^{(q)},\mathbf{x}^{(n)})}{\min_{n} \, (\mathbf{x}^{(q)},\mathbf{x}^{(n)})} \right] 
-\to 1$$
-
-:wrench: <span class='practice'> Practical </span>  : using dimensionality reduction often gives you better results for subsequent steps due to this curse. It makes the algorithm converge faster and reduces overfitting. But be careful not to underfit by using too few features.
-
-:mag: <span class='note'> Side Notes </span>  : 
-* Although the curse of dimensionality is a big issue, we can find effective techniques in high-dimensions because:
-  * Real data is often confined to a lower *effective* dimensionality (*e.g.* a low dimensional manifold in a higher dimensional space). 
-  * Interpolation-like techniques can overcome some of the sparsity issues due to the local smoothness of real data.
-* You often see plots of the unit $d$-ball volume vs its dimensionality. Although the non-monotonicity of [such plots](http://bit-player.org/2011/the-n-ball-game) is intriguing, they can erroneously make you believe that high dimensional hypersphere are smaller than low dimensional ones. This does not make sense as a lower dimensional hypersphere can always be fitted in a higher dimensional one. The issue arises from comparing apple and oranges (no puns intended :sweat_smile:) due to different units: Is $0.99 m^2$ really smaller than $1 m$?
-
-:information_source: <span class='resources'> Resources </span> : Great post about the [curse of dimensionality in classification](http://www.visiondummy.com/2014/04/curse-dimensionality-affect-classification/) which inspired me, [On the Surprising Behavior of Distance Metrics in High Dimensional Space](https://bib.dbvis.de/uploadedFiles/155.pdf) is a famous paper which proposes the use of fractional distance metrics, nice [blog](https://martin-thoma.com/average-distance-of-points/#average-angle) of simulations.
-
-Images modified from: [oranges](https://design.tutsplus.com/tutorials/how-to-make-a-delicious-vector-orange-in-9-decisive-steps--vector-229), [7D cube](http://yaroslavvb.blogspot.sg/2006/05/curse-of-dimensionality-and-intuition.html)
