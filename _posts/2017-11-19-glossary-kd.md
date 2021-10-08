@@ -2,7 +2,7 @@
 title: 'Knowledge Distillation'
 date: 2019-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/curse
+permalink: /machine-learning-glossary/concepts/kd
 toc: false
 excerpt: "ML concepts: knowledge distillation."
 header: 
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-curse
+  - /posts/2017/11/glossary-kd
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary
@@ -20,7 +20,6 @@ sidebar:
 
 {% include base_path %}
 
-# Model Distillation
 Knowledge distillation involves learning a smaller network from a large network using supervision from the
 larger network and minimizing the entropy, distance or divergence between their probabilistic estimates. 
 
@@ -133,11 +132,11 @@ Instead of transferring the outputs of the teacher network,~\citet{heo2019knowle
 
 $$
 \begin{equation}\label{eq:trans_act_loss}
-\mathcal{L}(I) =||\rho(\mathcal{T}(\mathcal{I}))\sigma \big(\mu \mathbf{1} - r(\mathcal{S}(\mathcal{I}))\big)+ \big(1 - \rho (\cT(\mathcal{I}))\big) \circ \sigma ( \mu \mathbf{1} + r(\mathcal{S}(\mathcal{I}))\big)||_2^2
+\mathcal{L}(I) =||\rho(\mathcal{T}(\mathcal{I}))\sigma \big(\mu \mathbf{1} - r(\mathcal{S}(\mathcal{I}))\big)+ \big(1 - \rho (\mathcal{T}(\mathcal{I}))\big) \circ \sigma ( \mu \mathbf{1} + r(\mathcal{S}(\mathcal{I}))\big)||_2^2
 \end{equation}
 $$
 
-where $$\mathcal{S}(\mathcal{I})$ and $\mathcal{T}(\mathcal{I})$$ are the neuron response tensors for student and teacher networks,  $\rho(\cT(I))$ is the the activation of teacher neurons corresponding to class labels, $r(\mathcal{S}(\mathcal{I}))$ is the , $r$ is a connector function (a fully connected layer in their experiments) that converts a neuron response vector of student to the same size as the teacher vector, $\circ$ is elementwise product of vectors and $\mu$ is the margin to stabilize training.
+where $$\mathcal{S}(\mathcal{I})$ and $\mathcal{T}(\mathcal{I})$$ are the neuron response tensors for student and teacher networks,  $\rho(\mathcal{T}(I))$ is the the activation of teacher neurons corresponding to class labels, $r(\mathcal{S}(\mathcal{I}))$ is the , $r$ is a connector function (a fully connected layer in their experiments) that converts a neuron response vector of student to the same size as the teacher vector, $\circ$ is elementwise product of vectors and $\mu$ is the margin to stabilize training.
 
 #### Simulating Ensembled Teachers Training
 ~\citet{park2020improved} have extended the idea of student network learning from a noisy teacher to speech recognition and similarly found high compression rates. 
@@ -149,11 +148,11 @@ Layer Fusion (LF)~\citep{neill2020compressing} is a technique to identify simila
 
 ## Distilling Recurrent (Autoregressive) Neural Networks
 Although the work by ~\citet{bucilua2006model} and ~\citet{hinton2015distilling} has often proven successful for reducing the size of neural models in other non-sequential tasks, many sequential tasks in NLP and CV have high-dimensional outputs (machine translation, pixel generation, image captioning etc.). This means using the teachers probabilistic outputs as targets can be expensive.
-~\citet{kim2016sequence} use the teachers hard targets (also 1-hot vectors) given by the highest scoring beam search prediction from an encoder-decoder RNN, instead of the soft output probability distribution. The  teacher distribution $q(y_t|x)$ is approximated  by  its  mode:$q(y_s|x) \approx 1{t= \argmax_{y_t \in \mathcal{Y}} q(y_t|x)}$ with the following objective
+~\citet{kim2016sequence} use the teachers hard targets (also 1-hot vectors) given by the highest scoring beam search prediction from an encoder-decoder RNN, instead of the soft output probability distribution. The  teacher distribution $q(y_t|x)$ is approximated  by  its  mode:$q(y_s|x) \approx 1{t= \operatorname{argmax}_{y_t \in \mathcal{Y}} q(y_t|x)}$ with the following objective
 
 $$
 \begin{equation}
-\mathcal{L}_{SEQ-MD} = - \mathbb{E}_{x \sim D} \sum_{y_t \in \mathcal{Y}} p(y_t|x) \log p(y_t|x) \approx - \mathbb{E}_{x \sim D},\hat{y}_s = \argmax_{y_t \in \mathcal{Y}} q(y_t|x)[\log p(y_t =\hat{y}_s|x)]    
+\mathcal{L}_{SEQ-MD} = - \mathbb{E}_{x \sim D} \sum_{y_t \in \mathcal{Y}} p(y_t|x) \log p(y_t|x) \approx - \mathbb{E}_{x \sim D},\hat{y}_s = \operatorname{argmax}_{y_t \in \mathcal{Y}} q(y_t|x)[\log p(y_t =\hat{y}_s|x)]    
 \end{equation}
 $$
 
@@ -183,8 +182,8 @@ $$
 \[
 L_{layer}\big(S_m, T_g(m)  \big) =
 \begin{cases}
-  \text{MSE}(\mat{E}^S \mat{W}_e \mat{E}^T) & m = 0 \\
-    \text{MSE}(\mat{H}^S \mat{W}_h, \mat{H}^T) + \frac{1}{h} \sum_{i=1}^h \text{MSE}(\mat{A}^{S}_i, \mat{A}^T_i)  & M \geq m > 0 \\
+  \text{MSE}(\mathbf{E}^S \mathbf{W}_e \mathbf{E}^T) & m = 0 \\
+    \text{MSE}(\mathbf{H}^S \mathbf{W}_h, \mathbf{H}^T) + \frac{1}{h} \sum_{i=1}^h \text{MSE}(\mathbf{A}^{S}_i, \mathbf{A}^T_i)  & M \geq m > 0 \\
      \text{softmax}(\vec{z}^T) \cdot \text{log-softmax}(\vec{z}^S/t) & m = M + 1 \\
 \end{cases}
 \]
@@ -289,23 +288,23 @@ the normalized and flattened teachers hidden representation $$P^{\tau}_T$$ and t
 
 $$
 \begin{equation}\label{eq:fitnet_loss}
-    \cL_{\text{MD}}(\mat{W}_S) = H(y_{\text{true}},P_S) + \gamma H(P^{\tau}_T,P^{\tau}_S)
+    \cL_{\text{MD}}(\mathbf{W}_S) = H(y_{\text{true}},P_S) + \gamma H(P^{\tau}_T,P^{\tau}_S)
 \end{equation}
 $$
 
-\autoref{eq:conv_regressor} shows the loss between the teacher weights $\mat{W}_{Guided}$ for a given layer
- and the reconstructed weights $\mat{W}_r$ which are the weights of a corresponding student network projected
+\autoref{eq:conv_regressor} shows the loss between the teacher weights $\mathbf{W}_{Guided}$ for a given layer
+ and the reconstructed weights $\mathbf{W}_r$ which are the weights of a corresponding student network projected
   using a convolutional layer (cuts down computation compared to a fully-connected projection layer) to the
    same hidden size of the teacher network weights. 
 
 $$
 \begin{equation}\label{eq:conv_regressor}
-    \cL_{\text{HT}} (\mat{W}_{T},\mat{W}_r) = \frac{1}{2}||u_h(\vec{x}; \mat{W}_{\text{Hint}}) - r(v_g(\vec{x};\mat{W}_{\text{T}});\mat{W}_r)||^2
+    \cL_{\text{HT}} (\mathbf{W}_{T},\mathbf{W}_r) = \frac{1}{2}||u_h(\vec{x}; \mathbf{W}_{\text{Hint}}) - r(v_g(\vec{x};\mathbf{W}_{\text{T}});\mathbf{W}_r)||^2
 \end{equation}
 $$
 
 where $$u_h$$ and $$v_g$$ are the teacher/student deep nested functions up to their respective hint/guided
- layers with parameters $$\mat{W}_{\text{Hint}}$$ and $$\mat{W}_{\text{Guided}}$$, $$r$$ is the regressor function on top of the guided layer with parameters $\mat{W}_r$. Note that the outputs of uh and r have to be comparable, i.e., $u_h$ and $r$ must
+ layers with parameters $$\mathbf{W}_{\text{Hint}}$$ and $$\mathbf{W}_{\text{Guided}}$$, $$r$$ is the regressor function on top of the guided layer with parameters $\mathbf{W}_r$. Note that the outputs of uh and r have to be comparable, i.e., $u_h$ and $r$ must
 be the same non-linearity. The teacher tries to imitate the flow matrices from the teacher which are defined as the inner product between feature maps, such as layers in a residual block. 
 
 
@@ -336,8 +335,8 @@ Here, we describe how two commonly used generative models, variational inference
 
 
 \begin{multline}\label{eq:var_student}
-    \mathcal{L}(\vec{x}, \vec{y},\mat{W}_s,\mat{W}_t, \alpha) = - \frac{1}{N}\sum_{n=1}^N \vec{y}_n \log(\vec{z}^s_n) +  \lambda_T \Bigg[ 2T^2 D_{\text{KL}}\Bigg(  \sigma^{'} \Big(\frac{\vec{z}^s}{T}\Big) \Big|\Big|  \sigma^{'}  \Big(\frac{\vec{z}^t}{T}\Big)\Bigg)\Bigg] \\
-    + \lambda_V \mathcal{L}_{\text{KL}}(\mat{W}_s, \alpha) + \lambda_g \sum_{m=1}^M\Big|\max_{n,k,h,l} W_{T:S}(m, n, k, h, l)\Big|
+    \mathcal{L}(\vec{x}, \vec{y},\mathbf{W}_s,\mathbf{W}_t, \alpha) = - \frac{1}{N}\sum_{n=1}^N \vec{y}_n \log(\vec{z}^s_n) +  \lambda_T \Bigg[ 2T^2 D_{\text{KL}}\Bigg(  \sigma^{'} \Big(\frac{\vec{z}^s}{T}\Big) \Big|\Big|  \sigma^{'}  \Big(\frac{\vec{z}^t}{T}\Big)\Bigg)\Bigg] \\
+    + \lambda_V \mathcal{L}_{\text{KL}}(\mathbf{W}_s, \alpha) + \lambda_g \sum_{m=1}^M\Big|\max_{n,k,h,l} W_{T:S}(m, n, k, h, l)\Big|
 \end{multline}
 
 
@@ -365,7 +364,7 @@ First they propose Naive GAN (NaGAN) which consists of a classifier $C$ and a di
 
 $$
 \begin{equation}
-\min_{c} \max_{d} V(c, d) = \mathbb{E}_{\vec{y} \sim p_u} [\log p_d(\vec{x}, \vec{y})] + \mathbb{E}_{\vec{y} \sim p_c}[\log(1 - p^{\varrho}_d(\vec{x}, \vec{y}))]    
+\min_{c} \max_{d} V(c, d) = \mathbb{E}_{\vec{y} \sim p_u} \[log p_d(\vec{x}, \vec{y})\] + \mathbb{E}_{\vec{y} \sim p_c}[\log(1 - p^{\varrho}_d(\vec{x}, \vec{y}))]    
 \end{equation}
 $$
 
@@ -445,7 +444,7 @@ They aim to preserve similarity between student and pretrained teacher activatio
 
 $$
 \begin{equation}\label{eq:spdl}
- \mathcal{L} = \mathcal{L}_{\text{ce}} (\vec{y}, \phi(\vec{Z}_S)) + \frac{\gamma}{b^2} \sum_{(l, l^{'}) \in \mathcal{I}} ||\mat{G}^{(l)}_T  - \mat{G}^{(l')}_S ||^2_F
+ \mathcal{L} = \mathcal{L}_{\text{ce}} (\vec{y}, \phi(\vec{Z}_S)) + \frac{\gamma}{b^2} \sum_{(l, l^{'}) \in \mathcal{I}} ||\mathbf{G}^{(l)}_T  - \mathbf{G}^{(l')}_S ||^2_F
 \end{equation}
 $$
 
@@ -465,8 +464,8 @@ Instead of minimizing the KL divergence between the scalar outputs of teacher ne
 
 $$
 \begin{multline}
-    f^{S*} = \argmax_{f^S} \max_h \mathcal{L}_{\text{critic}}(h) = \\
-    \argmax_{f^S} \max_h   \mathbb{E}_q(T ,S|C=1)[\log h(T, S)] +  N \mathbb{E}_{q}(T ,S|C=0)[\log(1 - h(T, S))]
+    f^{S*} = \operatorname{argmax}_{f^S} \max_h \mathcal{L}_{\text{critic}}(h) = \\
+    \operatorname{argmax}_{f^S} \max_h   \mathbb{E}_q(T ,S|C=1)[\log h(T, S)] +  N \mathbb{E}_{q}(T ,S|C=0)[\log(1 - h(T, S))]
 \end{multline}
 $$
 

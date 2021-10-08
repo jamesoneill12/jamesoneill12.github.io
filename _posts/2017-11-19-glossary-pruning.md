@@ -1,10 +1,10 @@
 ---
-title: 'Evaluation metrics'
+title: 'Pruning'
 date: 2017-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/metrics
+permalink: /machine-learning-glossary/concepts/pruning
 toc: false
-excerpt: "ML concepts: evaluation metrics."
+excerpt: "ML concepts: pruning."
 header: 
   teaser: "blog/glossary/glossary.png"
 tags:
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-metrics
+  - /posts/2017/11/glossary-pruning
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary

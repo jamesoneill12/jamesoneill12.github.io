@@ -2,7 +2,7 @@
 title: 'Generative vs discriminative'
 date: 2017-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/gendisc
+permalink: /machine-learning-glossary/concepts/quantization
 toc: false
 excerpt: "ML concepts: generative vs discriminative."
 header: 
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-gendisc
+  - /posts/2017/11/glossary-quantization
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary

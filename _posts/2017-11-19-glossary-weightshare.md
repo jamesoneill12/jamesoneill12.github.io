@@ -1,10 +1,10 @@
 ---
-title: 'No free lunch'
+title: 'Weight Sharing'
 date: 2017-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/lunch
+permalink: /machine-learning-glossary/concepts/weightshare
 toc: false
-excerpt: "ML concepts: no free lunch."
+excerpt: "ML concepts: Weight Sharing."
 header: 
   teaser: "blog/glossary/glossary.png"
 tags:
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-lunch
+  - /posts/2017/11/glossary-weightshare
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary
