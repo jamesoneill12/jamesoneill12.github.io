@@ -1,7 +1,7 @@
 ---
 title: "Compressing deep neural networks via layer fusion"
 authors_before: ""
-authors_after: ", James O' Neill, Greg V. Steeg, Aram Galstyan"
+authors_after: ", Greg V. Steeg, Aram Galstyan"
 award: ""
 collection: publications
 permalink: /publication/dib

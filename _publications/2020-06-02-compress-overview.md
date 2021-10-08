@@ -1,7 +1,7 @@
 ---
 title: "An Overview of Neural Network Compression"
 authors_before: ""
-authors_after: ", James O' Neill"
+authors_after: ""
 award: ""
 collection: publications
 permalink: /publication/dib

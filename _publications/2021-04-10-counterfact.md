@@ -1,7 +1,7 @@
 ---
 title: "I Wish I Would Have Loved This One, But I Didn't--A Multilingual Dataset for Counterfactual Detection in Product Reviews"
 authors_before: ""
-authors_after: ", James O' Neill, Polina Rozenshtein, Ryuichi Kiryo, Motoko Kubota and Danushka Bollegala"
+authors_after: ", Polina Rozenshtein, Ryuichi Kiryo, Motoko Kubota and Danushka Bollegala"
 award: ""
 collection: publications
 permalink: /publication/dib
