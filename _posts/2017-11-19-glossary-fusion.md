@@ -1,10 +1,10 @@
 ---
-title: 'Supervised vs unsupervised'
+title: 'Layer Fusion'
 date: 2017-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/supunsup
+permalink: /machine-learning-glossary/concepts/fusion
 toc: false
-excerpt: "ML concepts: supervised vs unsupervised learning."
+excerpt: "ML concepts: layer fusion."
 header: 
   teaser: "blog/glossary/glossary.png"
 tags:
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-supunsup
+  - /posts/2017/11/glossary-fusion
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary

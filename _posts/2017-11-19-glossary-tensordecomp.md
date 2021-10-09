@@ -1,10 +1,10 @@
 ---
-title: 'Parametric vs non parametric'
+title: 'Tensor Decomposition'
 date: 2017-11-19
 #modified: 
-permalink: /machine-learning-glossary/concepts/parametric
+permalink: /machine-learning-glossary/concepts/tensordecomp
 toc: false
-excerpt: "ML concepts: parametric vs non parametric."
+excerpt: "ML concepts: tensor decomposition."
 header: 
   teaser: "blog/glossary/glossary.png"
 tags:
@@ -12,7 +12,7 @@ tags:
   - Glossary
 author_profile: false
 redirect_from: 
-  - /posts/2017/11/glossary-parametric
+  - /posts/2017/11/glossary-tensordecomp
 sidebar:
   title: "ML Glossary"
   nav: sidebar-glossary

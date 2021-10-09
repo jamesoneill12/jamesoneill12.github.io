@@ -38,19 +38,19 @@ sidebar-glossary:
         url: /machine-learning-glossary/concepts/pruning
       - title: "Quantization"
         url:  /machine-learning-glossary/concepts/quantization
-      - title: "Quantization"
+      - title: "Weight Sharing"
         url:  /machine-learning-glossary/concepts/weightshare
-      - title: "Parametric vs non parametric"
-        url:  /machine-learning-glossary/concepts/parametric
-      - title: "Supervised vs unsupervised"
-        url:  /machine-learning-glossary/concepts/supunsup
+      - title: "Tensor Decomposition"
+        url:  /machine-learning-glossary/concepts/tensordecomp
+      - title: "Weight Fusion"
+        url:  /machine-learning-glossary/concepts/fusion
   - title: "Models"
     children:
-      - title: "Decision trees"
+      - title: "Convolutional Neural Networks"
         url: /machine-learning-glossary/models/trees
-      - title: "Naive Bayes"
+      - title: "Recurrent Neural Networks"
         url: /machine-learning-glossary/models/naivebayes
-      - title: "Variational autoencoder"
+      - title: "Transformers"
         url: /machine-learning-glossary/models/vae
   - title: "Reinforcement learning"
     children:
