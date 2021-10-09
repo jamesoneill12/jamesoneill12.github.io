@@ -32,13 +32,27 @@ to the models performance and may require even more retraining steps to account 
 or neurons~\citep{yu2018nisp}. 
 
 
+The simplest pruning strategy involves setting a threshold $$\gamma$$ that decides which weights or units 
+(in this case, the absolute sum of magnitudes of incoming weights) are removed~\citep{hagiwara1994removal}.
+The threshold can be set based on each layers weight magnitude distribution, where weights centered around the mean 
+$$\mu$$ are removed, or it the threshold can be set globally for the whole network. Alternatively, pruning the weights
+ with lowest absolute value of the normalized gradient multiplied by the weight magnitude~\citep{lee2018snip} for a 
+ given set of mini-batch inputs can be used, either layer-wise or globally too. 
 
-The simplest pruning strategy involves setting a threshold $\gamma$$that decides which weights or units (in this case, the absolute sum of magnitudes of incoming weights) are removed~\citep{hagiwara1994removal}. The threshold can be set based on each layers weight magnitude distribution, where weights centered around the mean $\mu$$are removed, or it the threshold can be set globally for the whole network. Alternatively, pruning the weights with lowest absolute value of the normalized gradient multiplied by the weight magnitude~\citep{lee2018snip} for a given set of mini-batch inputs can be used, either layer-wise or globally too. 
+Instead of setting a threshold, one can predefine a percentage of weights to be pruned based on the magnitude of $$w$$,
+or a percentage aggregated by weights for each layer $$w_{l},\ \forall l \in L$$.  Most commonly, the percentage of
+weights that are closest to 0 are removed. The aforementioned criteria for pruning are all types of 
+\textit{magnitude-based pruning} (MBP). MBP has also been combined with other strategies such as adding new neurons 
+during iterative pruning to further improve performance~\citep{han2013structure,narasimha2008integrated}, where the
+number of new neurons added is less than the number pruned in the previous pruning step and so the overall number 
+of parameters monotonically decreases. 
 
-Instead of setting a threshold, one can predefine a percentage of weights to be pruned based on the magnitude of $w$, or a percentage aggregated by weights for each layer $w_{l},\ \forall l \in L$.  Most commonly, the percentage of weights that are closest to 0 are removed. The aforementioned criteria for pruning are all types of \textit{magnitude-based pruning} (MBP). MBP has also been combined with other strategies such as adding new neurons during iterative pruning to further improve performance~\citep{han2013structure,narasimha2008integrated}, where the number of new neurons added is less than the number pruned in the previous pruning step and so the overall number of parameters monotonically decreases. 
-
-MBP is the most commonly used in DNNs due to its simplicity and performs well for a wide class of machine learning models (including DNNs) on a diverse range of tasks~\citep{setiono2000pruned}. In general, global MBP tends to outperform layer-wise MBP~\citep{karnin1990simple,reed1993pruning,hagiwara1994removal,lee2018snip}, because there is more flexibility on the amount of sparsity for each layer, allowing more salient layer to be more dense while less salient to contain more non-zero entries.
-Before discussing more involved pruning methods, we first make some important categorical distinctions. 
+MBP is the most commonly used in DNNs due to its simplicity and performs well for a wide class of machine learning models
+(including DNNs) on a diverse range of tasks~\citep{setiono2000pruned}. In general, global MBP tends to outperform 
+layer-wise MBP~\citep{karnin1990simple,reed1993pruning,hagiwara1994removal,lee2018snip}, because there is more
+flexibility on the amount of sparsity for each layer, allowing more salient layer to be more dense while less salient 
+to contain more non-zero entries. Before discussing more involved pruning methods, we first make some important
+categorical distinctions. 
 
 
 ## Categorizing Pruning Techniques}
