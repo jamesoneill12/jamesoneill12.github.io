@@ -98,58 +98,6 @@ Another approach is to use scaling factors per group of weights (e.g channels in
 % \autoref{tab:proj} shows the set of projections they consider and if they are used at training time or just applied at test time after normal FP-32 training. Here $w_{ki}$ is the i-th element of a tensor in the $k$-th layer, $\alpha_k$ normalizes the k-th layer in [-1, 1] required for some projections. 
 
 In the best case of these distortions, they can achieve 11\% test error on CIFAR-10 with 0.68 effective bits per weight. They find that training with weight projections other than quantization performs relatively well on ImageNet and CIFAR-10, particularly their proposed stochastic projection rule that leads to 7.64\% error on CIFAR-10. 
-
-\iffalse
-
-\begin{table}[t]
-\centering
-\footnotesize
-\tabcolsep=0.11cm
-\scalebox{1.0}{
-\begin{tabular}{ | l | l | l | l |}
-	\hline
-	{\bf Projection} 	&	{\bf Definition} 	& {\bf Allowed states} & {\bf Use} \\
-	\hline
-	\hline
-	$\mathrm{Sign}(w_{ki})$		&$\alpha_k \mathrm{sign}(w_{ki})$	& $ \{-\alpha_k, +\alpha_k\}$	& Test and Train \\
-	\hline
-	$\mathrm{Round}(w_{ki})$ 	& $\alpha_k \mathrm{round}(\frac{w_{ki}}{\alpha_k})$ 	& $\{-\alpha_k , 0, +\alpha_k\}$		& Test and Train	\\[0.5ex]
-	\hline
-	$\mathrm{None}(w_{ki})$ 	& $w_{ki}$ 	& $(-\infty, \infty)$  	& Test and Train \\
-	\hline
-	$\mathrm{Power}(w_{ki}, \beta)$ 	& $\alpha_k |\frac{w_{ki}}{\alpha_k}|^\beta \mathrm{sign}(w_{ki})$ 	&  $[-\alpha_k, +\alpha_k]$ 		& Test and Train \\[0.5ex]
-	\hline	
-	$\mathrm{Stoch}(w_{ki})$	&
-	$
-	\begin{cases}
-   		+\alpha_k,	& \text{with probability } p=\frac{1}{2}(\frac{w_{ki}}{\alpha_k} + 1) \\
-    		-\alpha_k,    & \text{with probability } 1-p
-	\end{cases}
-	$ 	& $\{-\alpha_k, +\alpha_k\}$	& Train
-	\\  %For extra spacing
-	\hline
-	$\mathrm{StochM}(w_{ki},\gamma)$	& 
-	$
-	\begin{cases}
-   		+w_{ki} \mathrm{U}(\gamma,\frac{1}{\gamma}) ,	& \text{with probability } p=\frac{1}{2}(\frac{w_{ki}}{\alpha_k} + 1) \\
-    		-w_{ki} \mathrm{U}(\gamma,\frac{1}{\gamma}) ,	& \text{with probability } 1-p
-	\end{cases}
-	$	& $[-\frac{\alpha_k}{\gamma}, +\frac{\alpha_k}{\gamma}]$	& Train	 
- \\  %For extra spacing
-	\hline
-	$\mathrm{AddNorm}(w_{ki},\sigma)$	& $w_{ki} + \mathrm{N}(0,\alpha_k \sigma)$ 	& $(- \infty, \infty)$  	& Test \\
-	\hline
-$\text{MultUnif}(w_{ki}, \gamma)$ & $w_ki x U(\gamma, \frac{1}{\gamma})$ & $[-\frac{\alpha_k}{\gamma}, +\frac{\alpha_k}{\gamma}]$	& Test	 
- \\  %For extra spacing
-	\hline
-\end{tabular}
-}\\
-\caption {original source (~\citet{merolla2016deep}) Definitions for projections. $\mathrm{N}(0,\sigma)$ is drawn from a normal distribution with mean $0$ and standard deviation $\sigma$, and $\mathrm{U}(a,b)$ is drawn from a uniform distribution in the range $[a, b]$.}
-\label{tab:proj}
-\end{table}
-
-\fi
-
 Others have also shown DNNs robustness to training binary and ternary networks~\citep{gupta2015deep,courbariaux2014training}, albeit a larger number of bit weight and ternary weights that are required.  
 
 
@@ -296,11 +244,11 @@ Once the pruned network is established, the parameter are quantized to promote p
 the loss with respect to the binarized weights $$\hat{\vec{w}} = \alpha \vec{b}$$, where $$\alpha > 0$$
  and $$\vec{b}$$ is binary. During training, $$\alpha$$ is computed for the $$l$$-th layer at the $$t$$-th 
  iteration as $$\alpha^t_l = || \vec{d}^{t - 1} \otimes \vec{w}^t_l ||_1 / || \vec{d}^{t - 1 }_l ||_1$$
-  where $$\vec{d}^{t - 1}_l := \text{diag}(\mat{D}^{t - 1}_{l})$$ and $$\vec{b}^{t}_l = \sign(\vec{w}^t_l)$$.
+  where $$\vec{d}^{t - 1}_l := \text{diag}(\mathbf{D}^{t - 1}_{l})$$ and $$\vec{b}^{t}_l = \sign(\vec{w}^t_l)$$.
    The input is then rescaled for layer $l$ as  $\tilde{\vec{x}}^t_l = \alpha^t_l \vec{x}^t_{l-1}$ and then compute $\vec{z}^t_l$ with input $\tilde{x}^t_{l-1}$ and binary weight $\vec{b}^{t}_l$.
 
 
-~\autoref{eq:proximal_newton} shows the proximal newton update step where $w^{t}_{l}$ is the weight update at iteration $t$ for layer $l$, $\mat{D}$ is an approximation to the diagonal of the Hessian which is already given as the $2^{nd}$ momentum of the adaptive momentum (adam) optimizer. The $t$-th iteration of the proximal Newton update is as follows:
+~\autoref{eq:proximal_newton} shows the proximal newton update step where $w^{t}_{l}$ is the weight update at iteration $t$ for layer $l$, $\mathbf{D}$ is an approximation to the diagonal of the Hessian which is already given as the $2^{nd}$ momentum of the adaptive momentum (adam) optimizer. The $t$-th iteration of the proximal Newton update is as follows:
 
 $$
 \begin{equation}\label{eq:proximal_newton}
@@ -312,7 +260,7 @@ s.t.\hat{\vec{w}}_t^l= \alpha^t_l \vec{b}^t_l, \alpha^t_l>0, \ \vec{b}^t_l \in \
 $$
 
 where the loss $$\ell$$ w.r.t binarized version of $$\ell(w_t)$$ is expressed in terms of the $$2^{nd}$$-order 
-TS expansion using a diagonal approximation of the Hessian $$\mat{H}^{t-1}$$, which estimates of the Hessian at 
+TS expansion using a diagonal approximation of the Hessian $$\mathbf{H}^{t-1}$$, which estimates of the Hessian at 
 $$\vec{w}^{t-1}$$. Similar to the $$2^{nd}$$ order approximations discussed in~\autoref{eq:weight_reg}, 
 the Hessian is essential since $$\ell$$ is often flat in some directions but highly curved in others.
 
@@ -325,13 +273,13 @@ magnitudes and in turn the predictions, ELQ directly incorporates this quantizat
 
 $$
 \begin{equation}
-    \min_{\hat{\mat{W}}_{l}} + a_1 \cL_p (\mat{W}_l, \hat{\mat{W}}_l) + E(\mat{W}_l, \hat{\mat{W}}_l) \quad s.t. \hat{W} \in \{a_l c_k | 1 \leq k \leq K \}, \ 1 \leq l \leq L
+    \min_{\hat{\mathbf{W}}_{l}} + a_1 \mathcal{L}_p (\mathbf{W}_l, \hat{\mathbf{W}}_l) + E(\mathbf{W}_l, \hat{\mathbf{W}}_l) \quad s.t. \hat{W} \in \{a_l c_k | 1 \leq k \leq K \}, \ 1 \leq l \leq L
 \end{equation}
 $$
 
 where $$L_p$$ is the loss difference between quantized and the original model 
-$$||\cL(\mat{W}_l) - \cL(\hat{\mat{W}}_l)||$$, $$E$$ is the reconstruction error between the quantized and
-original weights $$||\mat{W}_l - \hat{\mat{W}_l}||^2$$, $$a_l$$ a regularization coefficient for the $$l$$-th
+$$||\mathcal{L}(\mathbf{W}_l) - \mathcal{L}(\hat{\mathbf{W}}_l)||$$, $$E$$ is the reconstruction error between the quantized and
+original weights $$||\mathbf{W}_l - \hat{\mathbf{W}_l}||^2$$, $$a_l$$ a regularization coefficient for the $$l$$-th
  layer and $$c_k$$ is an integer and $k$ is the number of weight centroids.
 
 
@@ -381,9 +329,11 @@ $$
 \begin{equation}\label{eq:soft_quant_tanh}
 \phi(x) = s \tanh (k(\vec{x} - m_i)), \quad \text{if} \quad \vec{x} \in \mathcal{P}_i
 \end{equation}
-\vspace{-0.5em}
+$$
+
 with
-\vspace{-0.5em}
+
+$$
 \begin{equation}
 m_i = l + (i + 0.5)\Delta \quad \text{and} \quad s = 1 \tanh(0.5 k \Delta)     
 \end{equation}
@@ -434,7 +384,7 @@ They optimize the rate distortion trade-off between the expected loss and the en
 
 $$
 \begin{equation}
-\min_{E,D,\vec{W}}\mathbb{E}_{X,Y}[\ell(\hat{F}(X), Y) + \lambda R(\mat{W})] + \beta H(E(\vec{Z}))    
+\min_{E,D,\vec{W}}\mathbb{E}_{X,Y}[\ell(\hat{F}(X), Y) + \lambda R(\mathbf{W})] + \beta H(E(\vec{Z}))    
 \end{equation}
 $$
 
@@ -450,7 +400,7 @@ $$b_{\text{KL}}$$ as
 
 $$
 \begin{equation}
-    \vec{c} \leftarrow \vec{c} - \eta \frac{1}{|J_c|} \sum_{(k, l) \in J_c} \frac{\partial \mathcal{L}}{ \partial b_{\text{KL}}} \quad \text{where} \quad J_{\vec{c}} = \{ (k,l) \ | \ c[\mat{I}_{\text{KL}}] = \vec{c} \}
+    \vec{c} \leftarrow \vec{c} - \eta \frac{1}{|J_c|} \sum_{(k, l) \in J_c} \frac{\partial \mathcal{L}}{ \partial b_{\text{KL}}} \quad \text{where} \quad J_{\vec{c}} = \{ (k,l) \ | \ c[\mathbf{I}_{\text{KL}}] = \vec{c} \}
 \end{equation}
 $$
 
