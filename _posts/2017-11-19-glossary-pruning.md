@@ -26,57 +26,72 @@ Pruning can lead to a reduction of storage and model runtime and performance is 
 the pruned network. Iterative weight pruning prunes while retraining until the desired network size and accuracy
 tradeoff is met. From a neuroscience perspective, it has been found that as humans learn they also carry out a 
 similar kind of iterative pruning, removing irrelevant or unimportant information from past experiences
-~\citep{walsh2013peter}. Similarly, pruning is not carried out at random, but selected so that unimportant information 
-about past experiences is discarded. In the context of DNNs, random pruning (akin to Binary Dropout) can be detrimental 
-to the models performance and may require even more retraining steps to account for the removal of important weights
+~\citep{walsh2013peter}. Similarly, pruning is not carried out at random, but selected so that unimportant 
+information about past experiences is discarded. In the context of DNNs, random pruning (akin to Binary Dropout) can be
+detrimental 
+to the models performance and may require even more retraining steps to account for the removal of important 
+weights
 or neurons~\citep{yu2018nisp}. 
-
 
 The simplest pruning strategy involves setting a threshold $$\gamma$$ that decides which weights or units 
 (in this case, the absolute sum of magnitudes of incoming weights) are removed~\citep{hagiwara1994removal}.
-The threshold can be set based on each layers weight magnitude distribution, where weights centered around the mean 
-$$\mu$$ are removed, or it the threshold can be set globally for the whole network. Alternatively, pruning the weights
- with lowest absolute value of the normalized gradient multiplied by the weight magnitude~\citep{lee2018snip} for a 
+The threshold can be set based on each layers weight magnitude distribution, where weights centered around the
+mean $$\mu$$ are removed, or it the threshold can be set globally for the whole network. Alternatively, pruning
+the weights with lowest absolute value of the normalized gradient multiplied by the weight magnitude~\citep{lee2018snip} for a 
  given set of mini-batch inputs can be used, either layer-wise or globally too. 
 
-Instead of setting a threshold, one can predefine a percentage of weights to be pruned based on the magnitude of $$w$$,
-or a percentage aggregated by weights for each layer $$w_{l},\ \forall l \in L$$.  Most commonly, the percentage of
-weights that are closest to 0 are removed. The aforementioned criteria for pruning are all types of 
-\textit{magnitude-based pruning} (MBP). MBP has also been combined with other strategies such as adding new neurons 
-during iterative pruning to further improve performance~\citep{han2013structure,narasimha2008integrated}, where the
-number of new neurons added is less than the number pruned in the previous pruning step and so the overall number 
-of parameters monotonically decreases. 
+Instead of setting a threshold, one can predefine a percentage of weights to be pruned based on the magnitude of
+$$w$$, or a percentage aggregated by weights for each layer $$w_{l},\ \forall l \in L$$.  Most commonly,
+the percentage of weights that are closest to 0 are removed. The aforementioned criteria for pruning are all types
+of \textit{magnitude-based pruning} (MBP). MBP has also been combined with other strategies such as adding new
+neurons during iterative pruning to further improve performance~\citep{han2013structure,narasimha2008integrated},
+where the number of new neurons added is less than the number pruned in the previous pruning step and so the 
+overall number of parameters monotonically decreases. 
 
-MBP is the most commonly used in DNNs due to its simplicity and performs well for a wide class of machine learning models
-(including DNNs) on a diverse range of tasks~\citep{setiono2000pruned}. In general, global MBP tends to outperform 
-layer-wise MBP~\citep{karnin1990simple,reed1993pruning,hagiwara1994removal,lee2018snip}, because there is more
-flexibility on the amount of sparsity for each layer, allowing more salient layer to be more dense while less salient 
-to contain more non-zero entries. Before discussing more involved pruning methods, we first make some important
-categorical distinctions. 
+MBP is the most commonly used in DNNs due to its simplicity and performs well for a wide class of machine 
+learning models (including DNNs) on a diverse range of tasks~\citep{setiono2000pruned}. In general, global 
+MBP tends to outperform layer-wise MBP~\citep{karnin1990simple,reed1993pruning,hagiwara1994removal,lee2018snip},
+because there is more flexibility on the amount of sparsity for each layer, allowing more salient layer to be more
+dense while less salient to contain more non-zero entries. Before discussing more involved pruning methods, 
+we first make some important categorical distinctions. 
 
 
 ## Categorizing Pruning Techniques}
-Pruning algorithms can be categorized into those that carry out pruning without retraining the pruning and those that do. Retraining is often required when pruning degrades performance. This can happen when the DNN is not necessarily overparameterized, in which case almost all parameters are necessary to maintain good generalization. 
+Pruning algorithms can be categorized into those that carry out pruning without retraining the pruning and those
+ that do. Retraining is often required when pruning degrades performance. This can happen when the DNN is not 
+ necessarily overparameterized, in which case almost all parameters are necessary to maintain good generalization. 
 
 Pruning techniques can also be categorized into what type of criteria is used as follows:
 
-* The aforementioned magnitude-based pruning whereby the weights with the lowest absolute value of the weight are removed based on a set threshold or percentage, layer-wise or globally. 
-* Methods that penalize the objective with a regularization term to force the model to learn a network with (e.g $\ell_1$, $\ell_2$$or lasso weight regularization) smaller weights and prune the smallest weights. 
-* Methods that compute the sensitivity of the loss function when weights are removed and remove the weights that result in the smallest change in loss.
+* The aforementioned magnitude-based pruning whereby the weights with the lowest absolute value of the weight
+ are removed based on a set threshold or percentage, layer-wise or globally. 
+* Methods that penalize the objective with a regularization term to force the model to learn a network with
+ (e.g $\ell_1$, $\ell_2$$or lasso weight regularization) smaller weights and prune the smallest weights. 
+* Methods that compute the sensitivity of the loss function when weights are removed and remove the weights
+ that result in the smallest change in loss.
 * Search-based approaches (e.g particle filters, evolutionary algorithms, reinforcement learning) that seek to learn or adapt a set of weights to links or paths within the neural network and keep those which are salient for the task. Unlike (1) and (2), the pruning technique does not involve gradient descent as apart of the pruning criteria (with the exception of using deep RL).
 
-#### Unstructured vs Structured Pruning}
-Another important distinction to be made is that between structured and unstructured pruning techniques where the latter aims to preserve network density for computational efficiency (faster computation at the expense of less flexibility) by removing groups of weights, whereas unstructured is unconstrained to which weights or activations are removed but the sparsity means that the dimensionality of the layers does not change.
-Hence, sparsity in unstructured pruning techniques provide good performance at the expense of slower computation. For example, MBP produces a sparse network that requires sparse matrix multiplication (SMP) libraries to take full advantage of the memory reduction and speed benefits for inference. However, SMP is generally slower than dense matrix multiplication and therefore there has been work towards preserving subnetworks which omit the need for SMP libraries (discussed in \autoref{sec:struct_prune}).
+#### Unstructured vs Structured Pruning
+Another important distinction to be made is that between structured and unstructured pruning techniques where the
+ latter aims to preserve network density for computational efficiency (faster computation at the expense of less
+  flexibility) by removing groups of weights, whereas unstructured is unconstrained to which weights or 
+  activations are removed but the sparsity means that the dimensionality of the layers does not change.
+Hence, sparsity in unstructured pruning techniques provide good performance at the expense of slower computation.
+ For example, MBP produces a sparse network that requires sparse matrix multiplication (SMP) libraries to take
+  full advantage of the memory reduction and speed benefits for inference. However, SMP is generally slower
+   than dense matrix multiplication and therefore there has been work towards preserving subnetworks which 
+   omit the need for SMP libraries (discussed in \autoref{sec:struct_prune}).
 
-With these categorical distinctions we now move on to the following subsections that describe various pruning approaches beginning with pruning by using weight regularization. 
+With these categorical distinctions we now move on to the following subsections that describe various pruning
+ approaches beginning with pruning by using weight regularization. 
 
 
-
-
-
-## Pruning using Weight Regularization}\label{eq:weight_reg}
-Constraining the weights to be close to 0 in the objective function by adding a penalty term and deleting the weights closest to 0 post-training can be a straightforward yet effective pruning approach.~\autoref{eq:penalty_term_1} shows the commonly used $\ell_2$$penalty that penalizes large weights $w_m$$in the $m$-th hidden layer with a large magnitude and $\vec{v}_m$$are the output layer weights of output dimension $C$.
+## Pruning using Weight Regularization
+Constraining the weights to be close to 0 in the objective function by adding a penalty term and deleting the
+ weights closest to 0 post-training can be a straightforward yet effective pruning approach.
+ ~\autoref{eq:penalty_term_1} shows the commonly used $$\ell_2$$penalty that penalizes large weights $$w_m$$ in
+ the $$m$$-th hidden layer with a large magnitude and $$\vec{v}_m$$ are the output layer weights of output 
+ dimension $$C$$.
 
 $$
 \begin{equation}\label{eq:penalty_term_1}
@@ -86,8 +101,9 @@ $$
 
 However, the main issue with using the above quadratic penalty is that all parameters decay exponentially at the same
  rate and disproportionately penalizes larger weights. Therefore,~\citet{weigend1991generalization} proposed the
-  objective shown in \autoref{eq:weig}.  When $f(w):= w^2/(1 + w^2)$$this penalty term is small and when large it 
-  tends to 1. Therefore, these terms can be considered as approximating the number of non-zero parameters in the network. 
+  objective shown in \autoref{eq:weig}.  When $$f(w):= w^2/(1 + w^2)$$ this penalty term is small and when
+  large it tends to 1. Therefore, these terms can be considered as approximating the number of non-zero parameters
+   in the network. 
 
 $$
 \begin{equation}\label{eq:weig}
@@ -125,22 +141,21 @@ that have the lowest sum of weight magnitudes correspond to the best maintaining
 </div>
 
 
-
 ## Pruning via Loss Sensitivity
 Networks can also be pruned by measuring the importance of weights or units by quantifying the change in loss when a weight or unit is removed and prune those which cause the least change in the loss.  Many methods from previous decades have been proposed based on this principle ~\citep{reed1993pruning,lecun1990optimal,hassibi1994optimal}. We briefly describe each one below in chronological order. 
 
 
 #### Skeletonization}
 ~\citet{mozer1989skeletonization} estimate which units are least important and deletes them during training.
-  The method is referred to as skeletonization, since it only keeps the units which preserve the main structure of the 
-  network that is required for maintaining good out-of-sample performance. Each weight $$w$$ in the network is assigned
-   an importance weight $$\alpha$$ where $$alpha=0$$ the weight becomes redundant and $$\alpha=1$$ the weight acts as a 
-   standard hidden unit. 
+The method is referred to as skeletonization, since it only keeps the units which preserve the main structure of the 
+network that is required for maintaining good out-of-sample performance. Each weight $$w$$ in the network is assigned
+an importance weight $$\alpha$$ where $$alpha=0$$ the weight becomes redundant and $$\alpha=1$$ the weight acts as a 
+standard hidden unit. 
 
 
 To obtain the importance weight for a unit, they calculate the loss derivative with respect to $$\alpha$$ as 
-$$\hat{\rho}_i = \partial \mathcal{L} / {\alpha_i}\big|_{\alpha_i = 1}$$ where $$\mathcal{L}$$ in this context is the sum
- of squared errors. Units are then pruned when $$\hat{\rho}_i$$ falls below a set threshold. However, they find that 
+$$\hat{\rho}_i = \partial \mathcal{L} / {\alpha_i}\big|_{\alpha_i = 1}$$ where $$\mathcal{L}$$ in this context 
+is the sum of squared errors. Units are then pruned when $$\hat{\rho}_i$$ falls below a set threshold. However, they find that 
  $$\hat{\rho}_i$$ can fluctuate throughout training and so they propose an exponentially-decayed moving average over time
  to smoothen the volatile gradient and also provide better estimates when the squared error is very small. This moving
   average is given as,
@@ -152,16 +167,16 @@ $$
 $$
 
 where $$\beta = 0.8$$ in their experiments. Applying skeletonization to current DNNs  is perhaps be too slow to compute
- as it was originally introduced in the context of using neural networks with a relatively small amount of parameters.
-  However, assigning importance weights for groups of weights, such as filters in a CNN is feasible and aligns with 
-  current literature~\citep{wen2016learning,anwar2017structured} on structured pruning
-   (discussed in ~\autoref{sec:struct_prune}).
+as it was originally introduced in the context of using neural networks with a relatively small amount of 
+parameters. However, assigning importance weights for groups of weights, such as filters in a CNN is feasible and
+aligns with current literature~\citep{wen2016learning,anwar2017structured} on structured pruning
+(discussed in ~\autoref{sec:struct_prune}).
 
-#### Pruning Weights with \textit{Low Sensitivity}}
+#### Pruning Weights with Low Sensitivity
 
-~\citet{karnin1990simple} measure the sensitivity $S$$of the loss function with respect to weights and prune weights with
- low sensitivity. Instead of removing each weight individually, they approximate $S$$by the sum of changes experienced
-  by the weight during training as
+~\citet{karnin1990simple} measure the sensitivity $$S$$ of the loss function with respect to weights and prune 
+weights with low sensitivity. Instead of removing each weight individually, they approximate $$S$$ by the sum
+of changes experienced by the weight during training as
 
 $$
 \begin{equation}\label{eq:simple_sensitivity_2}
@@ -175,7 +190,7 @@ where $$w^f$$ is the final weight value at each pruning step, $$w^i$$ is the ini
 
 $$
 \begin{equation}\label{eq:simple_sensitivity_3}
-    \hat{S}_{ij} = \Big|- \sum_{n=0}^{N-1}\big[\Delta \vec{w}_{ij}(n)\big]^2 \frac{\vec{w}^f_{ij}}{\nabla (\vec{w}^f_{ij} - \vec{w}^i_{ij})} \Big|
+    \hat{S}_{ij} = \Big|- \sum_{n=0}^{N-1}\big\[\Delta \vec{w}_{ij}(n)\big]^2 \frac{\vec{w}^f_{ij}}{\nabla (\vec{w}^f_{ij} - \vec{w}^i_{ij})} \Big|
 \end{equation}
 $$
 
@@ -225,9 +240,9 @@ $$\delta \breve{W}$$, $$g_i$$ are the components of the gradient $$\partial \mat
 and $$h_{ij}$$ are the elements of the Hessian 
 $$\mathbf{H}$$where $\mathbf{H}_{ij} := \partial^2 \mathcal{L}/\partial \breve{w}_i \partial \breve{w}_j$$. 
 Since most well-trained networks will have $$\mathcal{L} \approx 0$, the $1^{st}$$ term is $$\approx 0$$.
- Assuming the perturbations on $$W$$ are small then the last term will also be small and hence ~\citet{lecun1990optimal}
-  assume the off-diagonal values of $$\mathbf{H}$$ are $$0$$ and hence 
-  $$1/2\sum_{i \neq j} h_{ij} \delta \breve{w}_i \delta w_j := 0$$. Therefore, $$\delta \mathcal{L}$$is expressed as,
+Assuming the perturbations on $$W$$ are small then the last term will also be small and hence ~\citet{lecun1990optimal}
+assume the off-diagonal values of $$\mathbf{H}$$ are $$0$$ and hence 
+$$1/2\sum_{i \neq j} h_{ij} \delta \breve{w}_i \delta w_j := 0$$. Therefore, $$\delta \mathcal{L}$$is expressed as,
 
 $$
 \begin{equation}
@@ -287,8 +302,8 @@ $$
 \end{equation}
 $$
 
-where $$\lambda$$is a Lagrange undetermined multiplier. The functional derivatives are taken and the constraints of 
-\autoref{eq:obs_2} are applied. Finally, matrix inversion is used to find the optimal weight change and resulting 
+where $$\lambda$$is a Lagrange undetermined multiplier. The functional derivatives are taken and the constraints
+ of \autoref{eq:obs_2} are applied. Finally, matrix inversion is used to find the optimal weight change and resulting 
 change in error is expressed as, 
 
 $$
@@ -297,8 +312,8 @@ $$
 \end{equation}
 $$
 
-Defining the first derivative as $$\mathbf{X}_k := \frac{f(\vec{x}; \mathbf{W})}{\partial \mathbf{W}}$$ the Hessian is 
-expressed as,
+Defining the first derivative as $$\mathbf{X}_k := \frac{f(\vec{x}; \mathbf{W})}{\partial \mathbf{W}}$$ the 
+Hessian is expressed as,
 
 $$
 \begin{equation}
@@ -306,8 +321,8 @@ $$
 \end{equation}
 $$
 
-for an $$n$$-dimensional output and $$P$$ samples. This can be viewed as the sample covariance of the gradient and 
-$$\mathbf{H}$$ can be recursively computed as,
+for an $$n$$-dimensional output and $$P$$ samples. This can be viewed as the sample covariance of the gradient 
+and  $$\mathbf{H}$$ can be recursively computed as,
 
 $$
 \begin{equation}
@@ -315,7 +330,7 @@ $$
 \end{equation}
 $$
 
-where $$\mathbf{H}_0 = \alpha \mathbf{I}$$and $$\mathbf{H}_P = \mathbf{H}$$. 
+where $$\mathbf{H}_0 = \alpha \mathbf{I}$$ and $$\mathbf{H}_P = \mathbf{H}$$. 
 Here $$10^{-8 }\leq \alpha \geq 10^{-4}$$ is necessary to make $$\mathbf{H}^{-1}$$ less sensitive to the initial 
 conditions. For OBS, $$\mathbf{H}^{-1}$$ is required and to obtain it they use a matrix inversion formula
 ~\citep{kailath1980linear} which leads to the following update:
@@ -336,20 +351,22 @@ $$\mathbf{H}^{-1}$$as $\mathcal{O}(P n^2)$$.
 Other methods to Hessian approximation include dividing the network into subsets to use block diagonal approximations 
 and eigen decomposition of  $\mathbf{H}^{-1}$~\citep{hassibi1994optimal} and principal components of 
 $$\mathbf{H}^{-1}$$~\citep{levin1994fast} (unlike aforementioned approximations,~\citet{levin1994fast} do not require
- the network to be trained to a local minimum). However the main drawback is that the Hessian is relatively expensive 
- to compute for these methods, including OBD. For $$n$$ weights, the Hessian requires $$\mathcal{O}(n^2/2)$$ elements to
-  store and performs $$\mathcal{O}(P n^2)$$ calculations per pruning step, where $P$$is total number of pruning steps. 
+the network to be trained to a local minimum). However the main drawback is that the Hessian is relatively expensive 
+to compute for these methods, including OBD. For $$n$$ weights, the Hessian requires $$\mathcal{O}(n^2/2)$$ elements to
+store and performs $$\mathcal{O}(P n^2)$$ calculations per pruning step, where $$P$$ is total number of
+pruning steps. 
 
 ### Pruning using First Order Derivatives
-As $$2^{nd}$$order derivatives are expensive to compute and the aforementioned approximations may be insufficient in
+As $$2^{nd}$$order derivatives are expensive to compute and the aforementioned approximations may be insufficient
+ in
  representing the full Hessian, other work has focused on using $$1^{st}$$order information as an alternative
   approximation to inform the pruning criterion. 
 
 ~\citet{molchanov2016pruning} use a Taylor expansion (TE) as a criterion to prune by choosing a subset of weights 
 $$W_s$$which have a minimal change on the cost function. They also add a regularization term that explicitly 
 regularize the computational complexity of the network. \autoref{eq:ts_cost} shows how the absolute cost difference 
-between the original network cost with weights $w$$and the pruned network with $w'$$weights is minimized such that 
-the number of parameters are decreased where $||\cdot||_0$$denotes the $0$-norm bounds the number of non-zero 
+between the original network cost with weights $$w$$ and the pruned network with $$w'$$ weights is minimized such that 
+the number of parameters are decreased where $$||\cdot||_0$$ denotes the $0$-norm bounds the number of non-zero 
 parameters $$W_s$$. 
 
 $$
