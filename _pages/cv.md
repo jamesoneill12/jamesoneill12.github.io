@@ -11,7 +11,7 @@ redirect_from:
 
 <!-- taken from https://emiliendupont.github.io/resume/  -->
 
-Updated October 2021.
+Updated January 2024.
 
 Education 🎓
 ======
@@ -26,7 +26,7 @@ Education 🎓
   <div style="flex:4;">
     <p style="margin:0px">
       <b style="font-size: 130%;">University of Liverpool</b>
-      <span style="float:right; font-size:80%; color:#7a7a7a;">2021 -</span>
+      <span style="float:right; font-size:80%; color:#7a7a7a;">2018-2021</span>
     </p>
     PhD Machine Learning
     <!-- <div style="color:#7a7a7a">
