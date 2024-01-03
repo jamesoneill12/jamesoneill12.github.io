@@ -80,6 +80,47 @@ Education 🎓
 
 Work experience 💼
 ======
+
+<!-- DynamoFL -->
+<div style="display:flex;">
+
+  <div style="flex:0.5; padding-right:5%">
+    <img src="{{ site.url }}/images/resume/dynamofl.png" style="align:left; border: 1px solid #d3d3d3; border-style: outset;">
+  </div>
+
+  <div style="flex:4;">
+    <p style="margin:0px">
+      <b style="font-size: 130%;">DynamoFL</b>
+      <span style="float:right; font-size:80%; color:#7a7a7a;">January 2024 - Current</span>
+    </p>
+    Machine Learning Research Scientist
+    <div style="color:#7a7a7a">
+      I am working on cutting edge LLM research around incorporating regulatory compliance, compressing LLMs and multilinguality.
+    </div>
+  </div>
+</div>
+ <hr style="height:1em; margin:0em; visibility:hidden;" />
+
+<!-- Huawei -->
+<div style="display:flex;">
+
+  <div style="flex:0.5; padding-right:5%">
+    <img src="{{ site.url }}/images/resume/huawei.png" style="align:left; border: 1px solid #d3d3d3; border-style: outset;">
+  </div>
+
+  <div style="flex:4;">
+    <p style="margin:0px">
+      <b style="font-size: 130%;">Huawei Ireland Research Center</b>
+      <span style="float:right; font-size:80%; color:#7a7a7a;">November 2021 - January 2024</span>
+    </p>
+    Machine Learning Research Scientist
+    <div style="color:#7a7a7a">
+      Research and engineering work for multilingual pretrained language models (small and large) including parameter efficient fine-tuning for tasks such as intent detection, text generation, question answering, synthetic data generation, semantic search and information retrieval. 
+    </div>
+  </div>
+</div>
+ <hr style="height:1em; margin:0em; visibility:hidden;" />
+
 <!-- Huawei -->
 <div style="display:flex;">
 
