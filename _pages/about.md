@@ -11,9 +11,10 @@ redirect_from:
 
 Welcome!
 
-I'm a PhD student in machine learning at the Computer Science Department in University of Liverpool.
+I'm a Machine Learning Research Scientist who has a PhD in Machine Learning from the Computer Science Department in University of Liverpool.
 My research interests include neural network compression (e.g pruning, knowledge distillation), efficient training schemse of large DNNs and 
-representation learning in natural language processing and computer vision. 
+representation learning in natural language processing and computer vision. I am currently applying such methods in the start-up world focusing on 
+making LLM smaller while maintaining performance and regulatory compliance at DynamoFL. 
 
 Before my PhD I worked at the [Insight Center for Data Analytics](https://www.insight-centre.org/) in Galway, Ireland, working 
 on applying machine learning to the legal domain and independently working on transfer learning schemes. 
